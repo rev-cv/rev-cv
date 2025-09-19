@@ -1,0 +1,391 @@
+---
+import SVGMail from "../assets/email.svg";
+import SVGGitHub from "../assets/github.svg";
+import SVGTelegram from "../assets/telegram.svg";
+import contacts from "../data/contacts.json";
+
+const { resume } = Astro.props;
+
+import type { TypePortfoliosGlob } from "../types/TypePortfolio";
+
+const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
+    "../data/portfolios/*.json",
+    {
+        eager: true,
+    }
+);
+
+const portfolios = [];
+
+for (const path in portfoliosJSON) {
+    const portfolio = portfoliosJSON[path].default;
+    portfolios.push({
+        jobtitle: portfolio.jobtitle,
+        url: portfolio.url,
+    });
+}
+---
+
+<div class="hero-banner">
+    <picture class="hero-banner__bg">
+        <img
+            src="/public/15-Black-Paper-Different-Texture-Types-A4-Matrix.jpg"
+            alt="Placeholder"
+        />
+    </picture>
+    <div class="hero-banner__content container">
+        <div class="hero-banner__my-name">Ревин Роман</div>
+        <div class="hero-banner__my-job">
+            <button>{resume.jobtitle}</button>
+            <div>
+                <div>
+                    {
+                        portfolios.map((portfolio) =>
+                            portfolio.jobtitle === resume.jobtitle ? null : (
+                                <a href={`/${portfolio.url}`}>
+                                    {portfolio.jobtitle}
+                                </a>
+                            )
+                        )
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="hero-banner__descr">{resume.description}</div>
+
+        <div class="hero-banner__btns">
+            <button>Мои проекты</button>
+            <button>Связаться со мной</button>
+        </div>
+
+        <div class="hero-banner__social-media">
+            <a
+                href={contacts.github.contact}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={contacts.github.title}
+            >
+                <SVGGitHub />
+            </a>
+            <a
+                href={contacts.email.contact}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={contacts.email.title}
+            >
+                <SVGMail />
+            </a>
+            <a
+                href={contacts.telegram.contact}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={contacts.telegram.title}
+            >
+                <SVGTelegram />
+            </a>
+        </div>
+
+        <div class="hero-banner__my-touch">
+            Любитель чистого кода и хорошего чая.
+        </div>
+        <picture class="hero-banner__avatar">
+            <img src="/public/2025-09-17.png" alt="Placeholder" />
+        </picture>
+    </div>
+</div>
+
+<style lang="scss">
+    .hero-banner {
+        padding: 20px;
+        text-align: center;
+        height: calc(100vh - 6em);
+        height: 100vh;
+        margin-top: -6em;
+
+        position: relative;
+        overflow: hidden;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &__bg {
+            position: absolute;
+
+            inset: 0;
+            background-position: center;
+            background-color: var(--color-black);
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.3;
+            }
+        }
+
+        &__content {
+            z-index: 3;
+            position: relative;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "name avatar"
+                "job avatar"
+                "descr avatar"
+                "btns avatar"
+                "media touch";
+            grid-template-rows: 1fr auto 1fr auto auto;
+
+            gap: 0 1em;
+        }
+
+        &__my-name {
+            grid-area: name;
+            justify-self: left;
+            align-self: self-end;
+            font-size: 2em;
+            font-weight: 700;
+            line-height: 1em;
+            color: var(--color-basic-white);
+        }
+
+        &__my-job {
+            grid-area: job;
+            justify-self: left;
+            position: relative;
+
+            > button {
+                font-size: 2.5em;
+                font-weight: 800;
+                line-height: 1em;
+                color: var(--color-azure);
+                padding: 0.5em 0;
+                cursor: pointer;
+                transition: color 300ms ease-in-out;
+
+                &:hover {
+                    color: var(--color-azure-light);
+                }
+            }
+
+            > div {
+                position: absolute;
+                width: 100%;
+                // background-color: yellowgreen;
+                padding: 0.5em;
+
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 0fr;
+
+                // overflow: hidden;
+
+                transition: grid-template-rows 300ms ease-in-out;
+
+                > div {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5em;
+                    overflow: hidden;
+                    transform-origin: top left;
+                    transition: transform 300ms ease-in-out 200ms;
+
+                    a {
+                        width: 80%;
+                        background-color: var(--color-azure);
+                        padding: 0.5em 0.3em 0.3em 0.3em;
+                        transition:
+                            margin-left 300ms ease-in-out 300ms,
+                            background-color 300ms ease-in-out;
+                        color: var(--color-black);
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        text-decoration: none;
+
+                        &:hover {
+                            background-color: var(--color-azure-light);
+                        }
+                    }
+                }
+            }
+        }
+
+        &__my-job.active {
+            > div {
+                grid-template-rows: 1fr;
+
+                > div {
+                    transform: rotate(3deg);
+                }
+            }
+        }
+
+        &__my-job.remove-transition {
+            > div {
+                opacity: 0;
+                transition: opacity 300ms ease-in-out;
+            }
+        }
+
+        &__my-touch {
+            grid-area: touch;
+            justify-self: center;
+            font-size: 0.7em;
+            font-style: italic;
+            color: var(--color-basic-white-80);
+            padding: 2em;
+            text-align: center;
+        }
+
+        &__descr {
+            grid-area: descr;
+            align-self: self-start;
+            text-align: left;
+            color: var(--color-basic-white-80);
+            font-size: 0.9em;
+            font-weight: 300;
+            line-height: 1.4em;
+        }
+
+        &__avatar {
+            grid-area: avatar;
+            justify-self: center;
+            align-self: center;
+
+            width: 25em;
+            height: 25em;
+            border-radius: 50%;
+            margin-top: 20px;
+            overflow: hidden;
+            border: 0.4em solid var(--color-basic-white-80);
+
+            img {
+                transform: scaleX(-1);
+            }
+        }
+
+        &__social-media {
+            grid-area: media;
+            justify-self: start;
+            align-self: center;
+
+            color: var(--color-basic-white);
+            display: flex;
+            justify-content: center;
+            gap: 0.5em;
+
+            a {
+                display: flex;
+                color: var(--color-basic-white-80);
+                background-color: transparent;
+                padding: 0.3em;
+                border-radius: 3px;
+                overflow: hidden;
+                position: relative;
+                transition:
+                    background-color 300ms ease-in-out,
+                    color 300ms ease-in-out transform 300ms ease-in-out;
+
+                &:hover {
+                    background-color: var(--color-button-hover-bg);
+                    color: var(--color-azure);
+                }
+
+                svg {
+                    width: 1.2em;
+                    height: 1.2em;
+                }
+            }
+        }
+
+        &__btns {
+            grid-area: btns;
+            justify-self: left;
+            align-self: self-end;
+
+            display: flex;
+            gap: 1em;
+
+            button {
+                padding: 0.5em 1em;
+                border: none;
+                border-radius: 6px;
+                background-color: #0a0a0a;
+                color: var(--color-basic-white-80);
+                cursor: pointer;
+                user-select: none;
+                overflow: hidden;
+
+                transition:
+                    color 300ms ease-in-out,
+                    background-color 300ms ease-in-out;
+                position: relative;
+
+                &::after {
+                    position: absolute;
+                    inset: 0;
+                    content: "";
+                    background-color: transparent;
+                    transition: background-color 300ms ease-in-out;
+                }
+
+                &:hover {
+                    color: var(--color-azure);
+                    background-color: #000;
+
+                    &::after {
+                        background-color: var(--color-button-hover-bg);
+                    }
+                }
+            }
+        }
+    }
+
+    $offset-step: 2%;
+
+    @for $i from 1 through 10 {
+        .hero-banner__my-job.active > div > div > a:nth-child(#{$i}) {
+            margin-left: ($offset-step * $i);
+        }
+    }
+</style>
+
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const myJob = document.querySelector(".hero-banner__my-job");
+        if (!myJob) return;
+
+        function hideListPortfolio() {
+            if (!myJob) return;
+            myJob.classList.add("remove-transition");
+            setTimeout(() => {
+                myJob.classList.remove(activeClass);
+                setTimeout(() => {
+                    myJob.classList.remove("remove-transition");
+                }, 300);
+            }, 300);
+        }
+
+        const activeClass = "active";
+
+        myJob.addEventListener("click", () => {
+            if (myJob.classList.contains(activeClass)) {
+                hideListPortfolio();
+            } else {
+                myJob.classList.add(activeClass);
+            }
+        });
+
+        // Скрытие при клике вне блока
+        document.addEventListener("mousedown", (event) => {
+            if (
+                myJob.classList.contains(activeClass) &&
+                !(event.target instanceof Node && myJob.contains(event.target))
+            ) {
+                hideListPortfolio();
+            }
+        });
+    });
+</script>

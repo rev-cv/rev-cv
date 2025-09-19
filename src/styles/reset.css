@@ -1,0 +1,103 @@
+*,
+*::before,
+*::after {
+  font-family: "Montserrat", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+dl,
+dd,
+ol,
+ul,
+menu,
+figure,
+button,
+hr {
+  margin: 0;
+  /* Удаляются все стандартные отступы у множества элементов, чтобы избежать непредсказуемого поведения. */
+}
+
+/* Remove list styles on ul, ol elements */
+ul,
+ol {
+  list-style: none;
+  /* Убираются маркеры списка у элементов ul и ol. */
+}
+
+/* Set core root defaults */
+html {
+  scroll-behavior: smooth;
+  font-size: 20px; /* 1rem = 16px */
+  /* Задается плавный скролл и базовый размер шрифта для html. */
+  height: 100%;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  /* Обеспечивается минимальная высота страницы и улучшенная читаемость текста для body. */
+
+  display: flex;
+  flex-direction: column;
+  /* gap: 100px; */
+
+  background-color: #0a0a0a;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  /* Ссылки без классов получают стандартное оформление, чтобы текст не перескакивал при наведении. */
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+  /* Изображения и элементы picture масштабируются в пределах контейнера и отображаются как блочные элементы. */
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  /* Элементы формы наследуют шрифты от родительских элементов. */
+  background-color: transparent;
+  border: none;
+  margin: 0;
+}
+
+*::-webkit-scrollbar {
+  width: 0.2rem;
+  height: 0.2rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: var(--color-vivid-orange-red);
+}
+
+*::selection {
+  background-color: var(--color-vivid-orange-red);
+  color: var(--color-basic-white);
+}

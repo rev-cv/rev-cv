@@ -1,0 +1,94 @@
+<header>
+    <div>
+        <menu class="container">
+            <div class="navigator">
+                <button>Главная</button>
+                <button>Обо мне</button>
+                <button>Проекты</button>
+                <button>Навыки</button>
+                <button>Контакты</button>
+            </div>
+
+            <a href="">Блог</a>
+        </menu>
+    </div>
+</header>
+
+<style>
+    header {
+        height: 6em;
+        z-index: 100;
+    }
+
+    header > div {
+        padding: 0.8em;
+        position: fixed;
+        width: 100%;
+    }
+
+    menu {
+        background-color: transparent;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8em;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        transition:
+            background-color 300ms ease-in-out,
+            max-width 300ms ease-in-out,
+            backdrop-filter 300ms ease-in-out;
+    }
+
+    menu.scrolled {
+        max-width: 1000px;
+        background-color: rgba(17, 17, 17, 0.6);
+        backdrop-filter: blur(6px);
+    }
+
+    button,
+    a {
+        color: var(--color-basic-white-80);
+        text-decoration: none;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 6px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        transition: color 300ms ease-in-out;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: transparent;
+            transition: background-color 300ms ease-in-out;
+        }
+
+        &:hover::before {
+            background-color: var(--color-button-hover-bg);
+        }
+
+        &:hover {
+            color: var(--color-basic-white);
+        }
+    }
+
+    .navigator {
+        display: flex;
+        gap: 0.3em;
+    }
+</style>
+
+<script>
+    window.addEventListener("scroll", () => {
+        const menu = document.querySelector("header > div > menu");
+        if (!menu) return;
+        if (window.scrollY > 60) {
+            menu.classList.add("scrolled");
+        } else {
+            menu.classList.remove("scrolled");
+        }
+    });
+</script>
