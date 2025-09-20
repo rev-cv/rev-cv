@@ -1,0 +1,122 @@
+
+{
+    "jobtitle": "Python Software Engineer",
+    "description": "Разрабатываю многофункциональные приложения на Python. Мой опыт включает создание десктопных приложений с помощью PyQt, автоматизацию рутинных задач, парсинг данных и разработку Telegram-ботов.",
+    "url": "python-software-engineer",
+    "skills": [
+        {
+            "name": "Python Language",
+            "level": 95,
+            "description": "Python Language"
+        },
+        {
+            "name": "PyQt",
+            "level": 76,
+            "description": "PyQt"
+        },
+        {
+            "name": "Telegram Bot",
+            "level": 65,
+            "description": "Telegram Bot"
+        },
+        {
+            "name": "Data Parsing",
+            "level": 80,
+            "description": "Data Parsing"
+        },
+        {
+            "name": "Automation",
+            "level": 80,
+            "description": "Automation"
+        },
+        {
+            "name": "Desktop Applications",
+            "level": 70,
+            "description": "Desktop Applications"
+        }
+    ],
+    "tools": [
+        {
+            "name": "VS Code",
+            "description": "Основной редактор кода с расширениями для Python разработки"
+        },
+        {
+            "name": "PyCharm",
+            "description": "IDE для профессиональной Python разработки"
+        },
+        {
+            "name": "Cursor",
+            "description": "AI-ассистированный редактор кода для ускорения разработки"
+        },
+        {
+            "name": "Docker",
+            "description": "Контейнеризация приложений для развертывания и масштабирования"
+        },
+        {
+            "name": "Git",
+            "description": "Система контроля версий для управления кодом и совместной работы"
+        },
+        {
+            "name": "Postman",
+            "description": "Тестирование API и автоматизация запросов"
+        },
+        {
+            "name": "Bruno",
+            "description": "API клиент для тестирования и отладки веб-сервисов"
+        },
+        {
+            "name": "SQLite",
+            "description": "Легковесная база данных для локальных приложений"
+        },
+        {
+            "name": "Jupyter Notebook",
+            "description": "Интерактивная среда для анализа данных и прототипирования"
+        },
+        {
+            "name": "PyQt Designer",
+            "description": "Визуальный редактор для создания GUI интерфейсов"
+        },
+        {
+            "name": "pytest",
+            "description": "Фреймворк для тестирования Python приложений"
+        },
+        {
+            "name": "Black",
+            "description": "Инструмент для автоматического форматирования Python кода"
+        }
+    ],
+    "quality": [
+        {
+            "name": "Коммуникация",
+            "description": "Эффективное взаимодействие с командой, клиентами и стейкхолдерами"
+        },
+        {
+            "name": "Решение проблем",
+            "description": "Аналитический подход к поиску и реализации технических решений"
+        },
+        {
+            "name": "Командная работа",
+            "description": "Совместная работа в Agile/Scrum командах с использованием современных методологий"
+        },
+        {
+            "name": "Управление временем",
+            "description": "Планирование задач и соблюдение дедлайнов в условиях многозадачности"
+        },
+        {
+            "name": "Креативность",
+            "description": "Создание инновационных программных решений и автоматизации"
+        },
+        {
+            "name": "Адаптивность",
+            "description": "Быстрое освоение новых технологий и адаптация к изменениям в проектах"
+        },
+        {
+            "name": "Внимание к деталям",
+            "description": "Тщательная проработка архитектуры, производительности и пользовательского опыта"
+        },
+        {
+            "name": "Непрерывное обучение",
+            "description": "Постоянное изучение новых технологий и лучших практик Python разработки"
+        }
+    ]
+}

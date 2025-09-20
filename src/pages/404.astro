@@ -1,0 +1,226 @@
+---
+import Layout from "../layouts/Layout.astro";
+import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
+
+/**
+ * Загружает все JSON файлы портфолио для отображения доступных ролей
+ */
+const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
+    "../data/portfolios/*.json",
+    {
+        eager: true,
+    },
+);
+
+/**
+ * Создает массив всех доступных портфолио
+ */
+const allPortfolios: PortfolioItem[] = [];
+for (const path in portfoliosJSON) {
+    const portfolio = portfoliosJSON[path].default;
+    allPortfolios.push(portfolio);
+}
+---
+
+<Layout title="Страница не найдена - Ревин Роман">
+    <main class="error-page">
+        <div class="container">
+            <div class="error-content">
+                <h1 class="error-code">404</h1>
+                <h2 class="error-title">Страница не найдена</h2>
+                <p class="error-description">
+                    К сожалению, запрашиваемая страница не существует. Возможно,
+                    вы искали одну из моих ролей разработчика?
+                </p>
+
+                {
+                    allPortfolios.length > 0 && (
+                        <div class="available-portfolios">
+                            <h3>Доступные роли:</h3>
+                            <nav class="portfolio-links">
+                                {allPortfolios.map((portfolio) => (
+                                    <a
+                                        href={`/${portfolio.url}`}
+                                        class="portfolio-link"
+                                    >
+                                        {portfolio.jobtitle}
+                                    </a>
+                                ))}
+                            </nav>
+                        </div>
+                    )
+                }
+
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary">На главную</a>
+                    <a href="/about-me" class="btn btn-secondary">Обо мне</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>
+
+<style lang="scss">
+    .error-page {
+        min-height: 100vh;
+        background-color: var(--color-black);
+        color: var(--color-basic-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .error-content {
+            text-align: center;
+
+            .error-code {
+                font-size: 8rem;
+                font-weight: 900;
+                color: var(--color-azure);
+                margin: 0;
+                line-height: 1;
+                text-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            }
+
+            .error-title {
+                font-size: 2.5rem;
+                margin: 1rem 0;
+                color: var(--color-basic-white);
+            }
+
+            .error-description {
+                font-size: 1.2rem;
+                line-height: 1.6;
+                color: var(--color-basic-white-80);
+                margin-bottom: 2rem;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .available-portfolios {
+                margin: 3rem 0;
+                padding: 2rem;
+                background-color: var(--color-dark-charcoal);
+                border-radius: 12px;
+                border: 1px solid var(--color-dark-charcoal-60);
+
+                h3 {
+                    font-size: 1.5rem;
+                    margin-bottom: 1.5rem;
+                    color: var(--color-basic-white);
+                }
+
+                .portfolio-links {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 1rem;
+                    justify-content: center;
+
+                    .portfolio-link {
+                        display: inline-block;
+                        padding: 0.75rem 1.5rem;
+                        background-color: var(--color-azure);
+                        color: var(--color-black);
+                        text-decoration: none;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+
+                        &:hover {
+                            background-color: var(--color-azure-light);
+                            transform: translateY(-2px);
+                        }
+                    }
+                }
+            }
+
+            .error-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                flex-wrap: wrap;
+
+                .btn {
+                    display: inline-block;
+                    padding: 1rem 2rem;
+                    border-radius: 6px;
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: all 0.3s ease;
+                    border: 2px solid transparent;
+
+                    &.btn-primary {
+                        background-color: var(--color-azure);
+                        color: var(--color-black);
+
+                        &:hover {
+                            background-color: var(--color-azure-light);
+                            transform: translateY(-2px);
+                        }
+                    }
+
+                    &.btn-secondary {
+                        background-color: transparent;
+                        color: var(--color-basic-white);
+                        border-color: var(--color-azure);
+
+                        &:hover {
+                            background-color: var(--color-azure);
+                            color: var(--color-black);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .error-page {
+            .error-content {
+                .error-code {
+                    font-size: 6rem;
+                }
+
+                .error-title {
+                    font-size: 2rem;
+                }
+
+                .error-description {
+                    font-size: 1rem;
+                }
+
+                .available-portfolios {
+                    margin: 2rem 0;
+                    padding: 1.5rem;
+
+                    .portfolio-links {
+                        flex-direction: column;
+                        align-items: center;
+
+                        .portfolio-link {
+                            width: 100%;
+                            max-width: 300px;
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .error-actions {
+                    flex-direction: column;
+                    align-items: center;
+
+                    .btn {
+                        width: 100%;
+                        max-width: 300px;
+                    }
+                }
+            }
+        }
+    }
+</style>

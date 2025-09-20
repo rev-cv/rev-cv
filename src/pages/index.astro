@@ -1,150 +1,34 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
-import HeroBanner from "../components/HeroBanner.astro";
-import resume from "../data/portfolios/react-developer.json";
----
+// import Layout from "../layouts/Layout.astro";
+import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
-<Layout>
-    <HeroBanner resume={resume} />
-    <!-- <Welcome /> -->
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla
-    eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor
-    sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat
-    ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum
-    porro quibusdam facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet
-    consectetur adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error
-    voluptatum provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam
-    facere voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur
-    adipisicing elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum
-    provident omnis, nemo illum ducimus reprehenderit, dolorum porro quibusdam facere
-    voluptates adipisci pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing
-    elit. Veniam nostrum ut nulla eaque! Placeat ut, error voluptatum provident omnis,
-    nemo illum ducimus reprehenderit, dolorum porro quibusdam facere voluptates adipisci
-    pariatur. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum
-    ut nulla eaque! Placeat ut, error voluptatum provident omnis, nemo illum ducimus
-    reprehenderit, dolorum porro quibusdam facere voluptates adipisci pariatur. Lorem
-    ipsum dolor sit, amet consectetur adipisicing elit. Veniam nostrum ut nulla eaque!
-    Placeat ut, error voluptatum provident omnis, nemo illum ducimus reprehenderit,
-    dolorum porro quibusdam facere voluptates adipisci pariatur.
-</Layout>
+/**
+ * Загружает все JSON файлы портфолио из папки portfolios
+ * Использует import.meta.glob для динамической загрузки
+ */
+const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
+    "../data/portfolios/*.json",
+    {
+        eager: true,
+    }
+);
+
+/**
+ * Создает массив всех доступных портфолио
+ */
+const allPortfolios: PortfolioItem[] = [];
+for (const path in portfoliosJSON) {
+    const portfolio = portfoliosJSON[path].default;
+    allPortfolios.push(portfolio);
+}
+
+/**
+ * Перенаправляем на первое доступное резюме
+ * Если резюме нет, перенаправляем на about-me
+ */
+if (allPortfolios.length > 0) {
+    return Astro.redirect(`/${allPortfolios[0].url}`);
+} else {
+    return Astro.redirect("/about-me");
+}
+---
