@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import HeroBanner from "../components/HeroBanner.astro";
+import AboutMe from "../components/AboutMeCards.astro";
 import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
 /**
@@ -11,7 +12,7 @@ export async function getStaticPaths() {
         "../data/portfolios/*.json",
         {
             eager: true,
-        },
+        }
     );
 
     const allPortfolios: PortfolioItem[] = [];
@@ -33,7 +34,7 @@ const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
     "../data/portfolios/*.json",
     {
         eager: true,
-    },
+    }
 );
 
 /**
@@ -54,7 +55,7 @@ const { resume: resumeSlug } = Astro.params;
  * Находит портфолио по URL slug
  */
 const currentResume = allPortfolios.find(
-    (portfolio) => portfolio.url === resumeSlug,
+    (portfolio) => portfolio.url === resumeSlug
 );
 
 /**
@@ -68,121 +69,11 @@ if (!currentResume) {
  * Получает остальные портфолио для навигации
  */
 const otherPortfolios = allPortfolios.filter(
-    (portfolio) => portfolio.url !== resumeSlug,
+    (portfolio) => portfolio.url !== resumeSlug
 );
 ---
 
 <Layout title={`${currentResume.jobtitle} - Ревин Роман`}>
     <HeroBanner resume={currentResume} />
-
-    <!-- Дополнительный контент для конкретного резюме -->
-    <section class="resume-content">
-        <div class="container">
-            <h2>О роли {currentResume.jobtitle}</h2>
-            <p>{currentResume.description}</p>
-
-            <!-- Навигация по другим ролям -->
-            {
-                otherPortfolios.length > 0 && (
-                    <div class="other-portfolios">
-                        <h3>Другие роли:</h3>
-                        <nav class="portfolio-nav">
-                            {otherPortfolios.map((portfolio) => (
-                                <a
-                                    href={`/${portfolio.url}`}
-                                    class="portfolio-link"
-                                >
-                                    {portfolio.jobtitle}
-                                </a>
-                            ))}
-                        </nav>
-                    </div>
-                )
-            }
-        </div>
-    </section>
+    <AboutMe cards={currentResume.aboutme} />
 </Layout>
-
-<style lang="scss">
-    .resume-content {
-        padding: 2rem 0;
-        background-color: var(--color-black);
-        color: var(--color-basic-white);
-        min-height: 50vh;
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--color-azure);
-        }
-
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            color: var(--color-basic-white-80);
-        }
-
-        .other-portfolios {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--color-dark-charcoal);
-
-            h3 {
-                font-size: 1.5rem;
-                margin-bottom: 1rem;
-                color: var(--color-basic-white);
-            }
-
-            .portfolio-nav {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 1rem;
-
-                .portfolio-link {
-                    display: inline-block;
-                    padding: 0.75rem 1.5rem;
-                    background-color: var(--color-azure);
-                    color: var(--color-black);
-                    text-decoration: none;
-                    border-radius: 6px;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        background-color: var(--color-azure-light);
-                        transform: translateY(-2px);
-                    }
-                }
-            }
-        }
-    }
-
-    @media (max-width: 768px) {
-        .resume-content {
-            padding: 1rem 0;
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            p {
-                font-size: 1rem;
-            }
-
-            .other-portfolios .portfolio-nav {
-                flex-direction: column;
-
-                .portfolio-link {
-                    text-align: center;
-                }
-            }
-        }
-    }
-</style>

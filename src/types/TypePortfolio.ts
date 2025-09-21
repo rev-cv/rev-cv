@@ -1,4 +1,16 @@
 /**
+ * Интерфейс для блока "О себе"
+ * @interface AboutMe
+ */
+export interface AboutMe {
+    /** Уникальный идентификатор блока */
+    id: string;
+    /** Заголовок блока */
+    title: string;
+    /** Описание блока */
+    descr: string;
+}
+/**
  * Интерфейс для навыка
  * @interface Skill
  */
@@ -44,12 +56,14 @@ export interface PortfolioItem {
     description: string;
     /** URL slug для навигации */
     url: string;
+    /** О себе (опционально) */
+    aboutme: AboutMe[];
     /** Навыки (опционально) */
-    skills?: Skill[];
+    skills: Skill[];
     /** Инструменты (опционально) */
-    tools?: Tool[];
+    tools: Tool[];
     /** Качества и компетенции (опционально) */
-    quality?: Quality[];
+    quality: Quality[];
 }
 
 /**
