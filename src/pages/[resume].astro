@@ -2,11 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import HeroBanner from "../components/HeroBanner.astro";
 import AboutMe from "../components/AboutMeCards.astro";
-import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
+import Case from "../components/Case.svelte";
 
-/**
- * Генерирует статические пути для всех доступных резюме
- */
+import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
+import type { TypeCase, TypeProjectCase } from "../types/TypeCase";
+
+// ↓ статические пути для всех доступных резюме
 export async function getStaticPaths() {
     const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
         "../data/portfolios/*.json",
@@ -26,54 +27,77 @@ export async function getStaticPaths() {
     }));
 }
 
-/**
- * Загружает все JSON файлы портфолио из папки portfolios
- * Использует import.meta.glob для динамической загрузки
- */
+// ↓ импорт всех JSON файлов с портфолио из папки portfolios
 const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
     "../data/portfolios/*.json",
-    {
-        eager: true,
-    }
+    { eager: true }
 );
-
-/**
- * Создает массив всех доступных портфолио
- */
 const allPortfolios: PortfolioItem[] = [];
 for (const path in portfoliosJSON) {
     const portfolio = portfoliosJSON[path].default;
     allPortfolios.push(portfolio);
 }
 
-/**
- * Получает параметр resume из URL
- */
+// ↓ получить текущий slug из URL и по нему найти нужное портфолио
 const { resume: resumeSlug } = Astro.params;
-
-/**
- * Находит портфолио по URL slug
- */
 const currentResume = allPortfolios.find(
     (portfolio) => portfolio.url === resumeSlug
 );
 
-/**
- * Если портфолио не найдено, возвращаем 404
- */
+// если портфолио не найдено → 404
 if (!currentResume) {
     return Astro.redirect("/404");
 }
 
-/**
- * Получает остальные портфолио для навигации
- */
+// ↓ остальные портфолио для навигации
 const otherPortfolios = allPortfolios.filter(
     (portfolio) => portfolio.url !== resumeSlug
 );
+
+// ↓ кейсы для портфолио
+const caseImports = import.meta.glob("../data/portfolio-cases/*.md");
+// ↓ загрузить все markdown-файлы
+const allCases: TypeProjectCase[] = await Promise.all(
+    Object.values(caseImports).map(async (importCase) => {
+        const mod = await importCase();
+        return {
+            frontmatter: (mod as { frontmatter: TypeCase }).frontmatter,
+            Content: (mod as { default: any }).default,
+        };
+    })
+);
+
+const cases = allCases
+    .filter((c) => c.frontmatter.portfolio_url === currentResume.url)
+    .sort((a, b) => a.frontmatter.order - b.frontmatter.order);
 ---
 
 <Layout title={`${currentResume.jobtitle} - Ревин Роман`}>
     <HeroBanner resume={currentResume} />
     <AboutMe cards={currentResume.aboutme} />
+    <div class="portfolio-cases container">
+        <h2>Кейсы</h2>
+        {
+            cases.map((c) => (
+                <Case client:only data={c.frontmatter} text={c.Content} />
+            ))
+        }
+    </div>
 </Layout>
+
+<style lang="scss">
+    .portfolio-cases {
+        margin-bottom: 4em;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1em;
+
+        h2 {
+            grid-column: 1 / -1;
+            font-size: 1.8em;
+            color: var(--color-basic-white);
+            font-weight: 700;
+            padding-bottom: 1em;
+        }
+    }
+</style>

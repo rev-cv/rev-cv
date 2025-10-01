@@ -10,8 +10,10 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/svelte": "^7.2.0",
     "astro": "^5.13.7",
-    "typescript": "^5.9.2"
+    "svelte": "^5.39.7",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

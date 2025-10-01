@@ -50,7 +50,7 @@ for (const path in portfoliosJSON) {
 <div class="hero-banner">
     <picture class="hero-banner__bg">
         <img
-            src="/public/15-Black-Paper-Different-Texture-Types-A4-Matrix.jpg"
+            src="15-Black-Paper-Different-Texture-Types-A4-Matrix.jpg"
             alt="Placeholder"
         />
     </picture>
@@ -174,9 +174,10 @@ for (const path in portfoliosJSON) {
 
         &__my-job {
             grid-area: job;
-            justify-self: left;
+            // justify-self: stretch;
             position: relative;
             z-index: 10;
+            // width: 100% !important;
 
             > button {
                 // font-size: 2.2em;
@@ -191,6 +192,9 @@ for (const path in portfoliosJSON) {
                     color 300ms ease-in-out,
                     transform 200ms ease-in-out;
                 text-align: left;
+
+                display: flex;
+                justify-content: stretch;
 
                 &:hover {
                     color: var(--color-azure-light);
@@ -288,6 +292,9 @@ for (const path in portfoliosJSON) {
             margin-top: 20px;
             overflow: hidden;
             border: 0.4em solid var(--color-basic-white-80);
+            pointer-events: none;
+
+            position: relative;
 
             img {
                 transform: scaleX(-1);
@@ -340,7 +347,7 @@ for (const path in portfoliosJSON) {
                 padding: 0.5em 1em;
                 border: none;
                 border-radius: 6px;
-                background-color: #0a0a0a;
+                background-color: var(--color-bg);
                 color: var(--color-basic-white-80);
                 cursor: pointer;
                 user-select: none;
