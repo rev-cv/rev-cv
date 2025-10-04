@@ -56,6 +56,8 @@ export interface PortfolioItem {
     description: string;
     /** URL slug для навигации */
     url: string;
+    /** Кейсы для конкретного портфолио в виде slug */
+    cases: string[];
     /** О себе (опционально) */
     aboutme: AboutMe[];
     /** Навыки (опционально) */

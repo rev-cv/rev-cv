@@ -1,15 +1,14 @@
 <script>
-    import { isOpenCaseModalStore } from "../store";
     import CaseModal from "./CaseModal.svelte";
 
-    let { data, text } = $props();
+    let isModalOpen = $state(false); // вместо true принимает rectungle
+    let { metadata, content } = $props();
 
     let cardNode;
 
     function scrollLock(isLock) {
         // isLock == true | false
         if (isLock) {
-            const panel = document.querySelector(".panel");
             const cwa = document.body.clientWidth;
             document.body.style.overflow = "hidden";
             const cwl = document.body.clientWidth;
@@ -23,29 +22,24 @@
         }
     }
 
-    isOpenCaseModalStore.subscribe((value) => scrollLock(value.isMounted));
+    $effect(() => scrollLock(isModalOpen ? true : false));
 </script>
 
 <button
     class="case-item"
     onclick={() => {
-        isOpenCaseModalStore.set({
-            isMounted: true,
-            isView: false,
-            rect: cardNode.getBoundingClientRect(),
-            data,
-            text,
-        });
+        // isModalOpen = true;
+        isModalOpen = cardNode.getBoundingClientRect();
     }}
     bind:this={cardNode}
 >
     <div class="case-item__title">
-        <h3>{data.title}</h3>
+        <h3>{metadata.title}</h3>
     </div>
 
     <div class="case-item__preview">
         <video
-            src={data.video}
+            src={metadata.video}
             preload="metadata"
             autoplay="autoplay"
             playsinline="playsinline"
@@ -56,19 +50,26 @@
     </div>
 
     <div class="case-item__tags">
-        {#each data.tech as tag}
+        {#each metadata.tech as tag}
             <div>{tag}</div>
         {/each}
     </div>
 </button>
 
-{#if $isOpenCaseModalStore.isMounted}
-    <CaseModal />
+{#if isModalOpen}
+    <CaseModal
+        {metadata}
+        {content}
+        rect={isModalOpen}
+        unmounte={() => {
+            isModalOpen = false;
+        }}
+    />
 {/if}
 
 <style lang="scss">
-    $border_radius: 2em;
-    $padding_in_item: 0.6em;
+    $border_radius: 2rem;
+    $padding_in_item: 0.6rem;
 
     .case-item {
         background-color: var(--color-black);

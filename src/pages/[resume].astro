@@ -5,15 +5,12 @@ import AboutMe from "../components/AboutMeCards.astro";
 import Case from "../components/Case.svelte";
 
 import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
-import type { TypeCase, TypeProjectCase } from "../types/TypeCase";
 
 // ↓ статические пути для всех доступных резюме
 export async function getStaticPaths() {
     const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
         "../data/portfolios/*.json",
-        {
-            eager: true,
-        }
+        { eager: true }
     );
 
     const allPortfolios: PortfolioItem[] = [];
@@ -54,22 +51,21 @@ const otherPortfolios = allPortfolios.filter(
     (portfolio) => portfolio.url !== resumeSlug
 );
 
-// ↓ кейсы для портфолио
-const caseImports = import.meta.glob("../data/portfolio-cases/*.md");
-// ↓ загрузить все markdown-файлы
-const allCases: TypeProjectCase[] = await Promise.all(
-    Object.values(caseImports).map(async (importCase) => {
-        const mod = await importCase();
-        return {
-            frontmatter: (mod as { frontmatter: TypeCase }).frontmatter,
-            Content: (mod as { default: any }).default,
-        };
-    })
+const caseImports = await Astro.glob("../data/cases/*.md");
+const allCases = await Promise.all(
+    Object.values(caseImports).map(async (importCase) => ({
+        metadata: importCase.frontmatter,
+        htmlContent: await importCase.compiledContent(),
+    }))
 );
 
 const cases = allCases
-    .filter((c) => c.frontmatter.portfolio_url === currentResume.url)
-    .sort((a, b) => a.frontmatter.order - b.frontmatter.order);
+    .filter((c) => currentResume.cases.includes(c.metadata.url))
+    .sort((a, b) => {
+        const aIndex = currentResume.cases.indexOf(a.metadata.url);
+        const bIndex = currentResume.cases.indexOf(b.metadata.url);
+        return aIndex - bIndex;
+    });
 ---
 
 <Layout title={`${currentResume.jobtitle} - Ревин Роман`}>
@@ -79,7 +75,11 @@ const cases = allCases
         <h2>Кейсы</h2>
         {
             cases.map((c) => (
-                <Case client:only data={c.frontmatter} text={c.Content} />
+                <Case
+                    client:only
+                    metadata={c.metadata}
+                    content={c.htmlContent}
+                />
             ))
         }
     </div>

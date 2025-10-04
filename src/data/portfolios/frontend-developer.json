@@ -2,6 +2,7 @@
     "jobtitle": "FrontEnd Developer",
     "description": "Создаю современные и функциональные веб-интерфейсы с фокусом на пользовательский опыт. Специализируюсь на HTML, CSS, JavaScript и современных технологиях фронтенда, создавая чистый, адаптивный и производительный код.",
     "url": "frontend-developer",
+    "cases": ["ui-go-surf", "ui-chess"],
     "skills": [
         {
             "name": "HTML5",
