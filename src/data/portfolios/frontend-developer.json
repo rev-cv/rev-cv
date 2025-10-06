@@ -6,83 +6,261 @@
     "skills": [
         {
             "name": "HTML5",
-            "level": 95,
-            "description": "Семантическая разметка и доступность"
+            "level": 3,
+            "description": "Семантическая разметка"
         },
+        { "name": "SASS/SCSS", "level": 3, "description": "Препроцессор CSS" },
         {
             "name": "CSS3",
-            "level": 90,
+            "level": 3,
             "description": "Стилизация, анимации и адаптивность"
         },
         {
-            "name": "JavaScript",
-            "level": 85,
+            "name": "Flexbox & Grid",
+            "level": 3,
+            "description": "Современные CSS макеты"
+        },
+        {
+            "name": "Responsive Design",
+            "level": 3,
+            "description": "Адаптивная верстка для всех устройств"
+        },
+        {
+            "name": "JavaScript (ES6+)",
+            "level": 3,
             "description": "Интерактивность и DOM манипуляции"
         },
         {
-            "name": "Vue.js",
-            "level": 80,
-            "description": "Прогрессивный JavaScript фреймворк"
+            "name": "DOM Manipulation",
+            "level": 3,
+            "description": "Эффективное управление элементами и событиями, оптимизация рефловов"
         },
         {
-            "name": "SASS/SCSS",
-            "level": 85,
-            "description": "Препроцессор CSS"
+            "name": "React",
+            "level": 3,
+            "description": "Библиотека для интерфейсов на компонентах с виртуальным DOM"
         },
         {
-            "name": "Webpack",
-            "level": 70,
-            "description": "Сборка и модульность"
+            "name": "React SPA",
+            "level": 2,
+            "description": "Одностраничные приложения на React"
+        },
+        {
+            "name": "Storage APIs",
+            "level": 2,
+            "description": "LocalStorage, SessionStorage, IndexedDB"
+        },
+        {
+            "name": "Jotai",
+            "level": 3,
+            "description": "Легковесная альтернатива Redux для управления состоянием в React"
+        },
+        {
+            "name": "Astro",
+            "level": 3,
+            "description": "Фреймворк для контент-сайтов с островной архитектурой и SSR"
+        },
+        {
+            "name": "Svelte",
+            "level": 3,
+            "description": "Компилируемый фреймворк с минимальной runtime-нагрузкой"
+        },
+        {
+            "name": "HTTP/HTTPS",
+            "level": 3,
+            "description": "Протоколы, методы, заголовки, статус-коды"
+        },
+        {
+            "name": "REST API",
+            "level": 3,
+            "description": "Интеграция с бэкенд-сервисами, CRUD операции, работа с HTTP"
+        },
+        {
+            "name": "Fetch API",
+            "level": 3,
+            "description": "Асинхронные HTTP-запросы"
+        },
+        {
+            "name": "Git",
+            "level": 3,
+            "description": "Контроль версий и совместная работа"
+        },
+        {
+            "name": "TypeScript",
+            "level": 2,
+            "description": "Статическая типизация для JavaScript"
+        },
+        {
+            "name": "WebSockets",
+            "level": 2,
+            "description": "Двустороннее соединение для живого обмена данными без перезагрузок"
+        },
+        {
+            "name": "Accessibility",
+            "level": 1,
+            "description": "Доступность интерфейсов (a11y)"
+        },
+        {
+            "name": "Dexie.js",
+            "level": 2,
+            "description": "Минималистичная обертка над IndexedDB для клиентского хранения"
+        },
+        {
+            "name": "SVG",
+            "level": 2,
+            "description": "Векторная графика, иконки, спрайты"
+        },
+        {
+            "name": "Browser Security",
+            "level": 2,
+            "description": "CORS, JWT, OAuth, защита от CSRF, HTTPS, CORS, CSP, iframe sandboxing, безопасные заголовки"
+        },
+        {
+            "name": "Chrome Extensions",
+            "level": 2,
+            "description": "Разработка браузерных расширений, Chrome APIs, content scripts"
+        },
+        {
+            "name": "Intersection Observer",
+            "level": 2,
+            "description": "Отслеживание видимости элементов"
+        },
+        {
+            "name": "Redux Toolkit",
+            "level": 2,
+            "description": "Стандартный подход для управления состоянием в React"
+        },
+        {
+            "name": "Next.js",
+            "level": 2,
+            "description": "React-фреймворк с SSR, SSG и полным стеком"
+        },
+        {
+            "name": "Tailwind CSS",
+            "level": 1,
+            "description": "Utility-first CSS фреймворк"
+        },
+        {
+            "name": "Jest",
+            "level": 1,
+            "description": "Unit-тестирование JavaScript кода"
+        },
+        {
+            "name": "Three.js",
+            "level": 1,
+            "description": "3D графика в браузере"
+        },
+        {
+            "name": "i18n",
+            "level": 1,
+            "description": "Интернационализация приложений"
+        },
+        {
+            "name": "GraphQL",
+            "level": 1,
+            "description": "Язык запросов для API"
+        },
+        {
+            "name": "PWA",
+            "level": 1,
+            "description": "Прогрессивные веб-приложения"
+        },
+        {
+            "name": "Storybook",
+            "level": 1,
+            "description": "Документирование и тестирование UI-компонентов"
+        },
+        {
+            "name": "Email Templates",
+            "level": 1,
+            "description": "Создание и поддержка HTML-шаблонов для рассылок"
+        },
+        {
+            "name": "WebAssembly",
+            "level": 1,
+            "description": "Высокопроизводительные вычисления"
         }
     ],
     "tools": [
         {
+            "name": "Operating Systems",
+            "description": "Linux (Kubuntu, Manjaro), Windows — комфортная работа в разных средах"
+        },
+        {
             "name": "VS Code",
             "description": "Основной редактор кода с расширениями для веб-разработки"
-        },
-        {
-            "name": "Bruno",
-            "description": "API клиент для тестирования и отладки веб-сервисов"
-        },
-        {
-            "name": "Cursor",
-            "description": "AI-ассистированный редактор кода для ускорения разработки"
-        },
-        {
-            "name": "Zed",
-            "description": "Современный редактор кода с высокой производительностью"
-        },
-        {
-            "name": "Figma",
-            "description": "Дизайн-инструмент для создания UI/UX макетов и прототипов"
-        },
-        {
-            "name": "Docker",
-            "description": "Контейнеризация приложений для развертывания и масштабирования"
-        },
-        {
-            "name": "Git",
-            "description": "Система контроля версий для управления кодом и совместной работы"
         },
         {
             "name": "Vite",
             "description": "Быстрый инструмент сборки для современных веб-приложений"
         },
         {
-            "name": "Obsidian",
-            "description": "Система управления знаниями для документирования проектов"
+            "name": "Figma / Pixso",
+            "description": "Дизайн-инструмент для создания UI/UX макетов и прототипов"
+        },
+        {
+            "name": "Node.js",
+            "description": "Серверный JavaScript"
+        },
+        {
+            "name": "Node Version Switcher (n)",
+            "description": "Быстрое переключение версий Node.js для разных проектов"
+        },
+        {
+            "name": "Node Package Manager (npm)",
+            "description": "Управление зависимостями и пакетами JavaScript"
+        },
+        {
+            "name": "ESLint + Prettier",
+            "description": "Качество и форматирование кода"
+        },
+        {
+            "name": "GitHub",
+            "description": "Хостинг для Git-репозиториев с возможностями совместной работы и CI/CD (GitHub Actions)"
+        },
+        {
+            "name": "Docker",
+            "description": "Контейнеризация приложений для развертывания и масштабирования"
         },
         {
             "name": "Chrome DevTools",
             "description": "Инструменты разработчика для отладки и профилирования"
         },
         {
-            "name": "Postman",
-            "description": "Тестирование API и автоматизация запросов"
+            "name": "ImageMagick",
+            "description": "Автоматизация обработки изображений: ресайз, оптимизация, форматы"
+        },
+        {
+            "name": "Iconify / SVGRepo",
+            "description": "Унифицированная библиотека иконок из 100+ наборов"
+        },
+        {
+            "name": "SSH / Remote-SSH",
+            "description": "Работа с удаленными серверами через SSH, настройка окружения"
+        },
+        {
+            "name": "Bruno",
+            "description": "API клиент для тестирования и отладки веб-сервисов"
+        },
+        {
+            "name": "Zed",
+            "description": "Современный редактор кода с высокой производительностью"
+        },
+        {
+            "name": "Obsidian",
+            "description": "Система управления знаниями для документирования проектов"
+        },
+        {
+            "name": "Babel",
+            "description": "Транспиляция современного JS для старых браузеров"
         },
         {
             "name": "Webpack",
             "description": "Модульный сборщик для оптимизации веб-приложений"
+        },
+        {
+            "name": "AI-Powered Development",
+            "description": "ChatGPT, GitHub Copilot, Claude - для автоматизации рутины, код-ревью, генерации тестов"
         }
     ],
     "quality": [
@@ -170,5 +348,13 @@
             "title": "Непрерывное обучение",
             "descr": "Изучаю новые инструменты и практики фронтенда, чтобы внедрять самые эффективные решения."
         }
+    ],
+    "roadmap": [
+        "Глубокое погружение во frontend-экспертизу",
+        "Сложная клиентская логика и UX",
+        "Углубление знаний в области производительности и оптимизации",
+        "Изучение принципов доступности (a11y) для улучшения UX",
+        "Развитие навыков UI/UX дизайна для создания более привлекательных интерфейсов",
+        "Постоянное обновление знаний о новых технологиях и трендах в веб-разработке"
     ]
 }

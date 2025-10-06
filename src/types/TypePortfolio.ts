@@ -66,6 +66,7 @@ export interface PortfolioItem {
     tools: Tool[];
     /** Качества и компетенции (опционально) */
     quality: Quality[];
+    roadmap?: string[];
 }
 
 /**

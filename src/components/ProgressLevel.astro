@@ -1,0 +1,139 @@
+---
+const { level = 0 } = Astro.props;
+---
+
+<div class="progress" data-level={level}>
+    <div class="progress__level"></div>
+    <div class="progress__level"></div>
+    <div class="progress__level"></div>
+    <div class="progress__level"></div>
+</div>
+
+<style lang="scss">
+    .progress {
+        display: flex;
+        gap: 1em;
+        margin-top: 0.5em;
+        user-select: none;
+
+        &__level {
+            flex-grow: 1;
+            background-color: var(--color-basic-white-80);
+            border-radius: 0.3em;
+            position: relative;
+
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            position: relative;
+
+            &:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 0;
+                height: 3px;
+                width: 1em;
+                background-color: var(--color-azure);
+                transform: translateY(-50%) translateX(1em);
+            }
+
+            &::before {
+                position: absolute;
+                top: 140%;
+                left: 0;
+                color: var(--color-azure);
+                z-index: 2;
+                font-size: 0.6em;
+                line-height: 1.2em;
+                width: 200px;
+                background-color: rgba(0, 0, 0, 0.5);
+                padding: 0.6em 1em;
+                border-radius: 3px;
+                transform-origin: top left;
+                transform: scale(0);
+                opacity: 0;
+                transition:
+                    transform 0.3s ease,
+                    opacity 0.3s ease;
+            }
+
+            &:hover::before {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        &[data-level="1"] {
+            .progress__level:nth-child(1) {
+                background-color: var(--color-azure);
+
+                &::after {
+                    background: linear-gradient(
+                        90deg,
+                        var(--color-azure) 0%,
+                        var(--color-basic-white-80) 100%
+                    );
+                }
+            }
+
+            .progress__level::after {
+                background: var(--color-basic-white-80);
+            }
+        }
+
+        &[data-level="2"] {
+            .progress__level:is(:nth-child(1), :nth-child(2)) {
+                background-color: var(--color-azure);
+            }
+
+            .progress__level:is(:nth-child(2))::after {
+                background: linear-gradient(
+                    90deg,
+                    var(--color-azure) 0%,
+                    var(--color-basic-white-80) 100%
+                );
+            }
+
+            .progress__level:is(:nth-child(3))::after {
+                background: var(--color-basic-white-80);
+            }
+        }
+
+        &[data-level="3"] {
+            .progress__level:is(:nth-child(1), :nth-child(2), :nth-child(3)) {
+                background-color: var(--color-azure);
+            }
+
+            .progress__level:is(:nth-child(3))::after {
+                background: linear-gradient(
+                    90deg,
+                    var(--color-azure) 0%,
+                    var(--color-basic-white-80) 100%
+                );
+            }
+        }
+
+        &[data-level="4"] {
+            .progress__level {
+                background-color: var(--color-azure);
+            }
+        }
+    }
+
+    .progress__level:nth-child(1)::before {
+        content: "Теоретическое понимание, минимальная практика";
+    }
+
+    .progress__level:nth-child(2)::before {
+        content: "Решал простые задачи, есть проектный опыт";
+    }
+
+    .progress__level:nth-child(3)::before {
+        content: "Регулярно использую, решаю сложные задачи";
+    }
+
+    .progress__level:nth-child(4)::before {
+        content: "Глубокое понимание, могу обучать других";
+    }
+</style>

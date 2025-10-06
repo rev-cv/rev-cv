@@ -1,0 +1,96 @@
+---
+import type { MySkills } from "../types/TypeSkills";
+import ProgressLevel from "./ProgressLevel.astro";
+const { items, title, isSkills = false } = Astro.props;
+
+const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
+
+console.log(s_items);
+---
+
+<div class={`my-item container${isSkills ? " skills" : " tools"}`}>
+    <h2 class="my-item__card-head">{title}</h2>
+    {
+        s_items.map((item: MySkills) => {
+            // @ts-ignore
+            // const Icon = svgs[card.id] ? svgs[card.id] : SVGCrossBrowser;
+            return (
+                <div class="my-item__card">
+                    <div class="my-item__card-title">{item.name}</div>
+
+                    <div class="my-item__card-descr">{item.description}</div>
+
+                    {isSkills && (
+                        // <div class="my-item__card-level">{`${item.level}%`}</div>
+                        <ProgressLevel level={item.level} />
+                    )}
+                </div>
+            );
+        })
+    }
+</div>
+
+<style lang="scss">
+    .my-item {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        // grid-auto-flow: column;
+        gap: 1em;
+        // padding-top: clamp(3em, 10vw, 5em);
+        padding-bottom: clamp(3em, 10vw, 5em);
+
+        &__card-head {
+            grid-column: 1 / -1;
+            font-size: 1.8em;
+            padding-bottom: 1em;
+            color: var(--color-basic-white);
+            font-weight: 700;
+            gap: 0.5em;
+        }
+
+        &__card {
+            background-color: var(--color-black);
+            padding: 2em 1.2em;
+            border-radius: 0.5em;
+
+            display: flex;
+            flex-wrap: wrap;
+
+            &-title {
+                font-size: 1em;
+                white-space: nowrap;
+                color: var(--color-basic-white);
+                font-weight: 700;
+                // order: 0;
+            }
+
+            &-level {
+                font-size: 0.9em;
+                color: var(--color-basic-white);
+                font-weight: 600;
+                // order: 2;
+            }
+
+            &-descr {
+                font-size: 0.6em;
+                // text-wrap: balance;
+                color: var(--color-basic-white);
+                flex-basis: 100%;
+                // order: 3;
+            }
+        }
+    }
+
+    // .my-item.skills {
+    //     .my-item__card::after {
+    //         content: "";
+    //         flex-grow: 1;
+    //         border-bottom: 1px dotted var(--color-basic-white);
+    //         margin: 0 10px;
+    //         height: 1px;
+    //         order: 1;
+    //         align-self: center;
+    //         opacity: 0.3;
+    //     }
+    // }
+</style>

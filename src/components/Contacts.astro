@@ -1,0 +1,136 @@
+---
+import SVGMail from "../assets/email.svg";
+import SVGGitHub from "../assets/github.svg";
+import SVGTelegram from "../assets/telegram.svg";
+import contacts_raw from "../data/contacts.json";
+
+const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
+    if (key === "email") {
+        return {
+            ...elem,
+            icon: SVGMail,
+        };
+    } else if (key === "github") {
+        return {
+            ...elem,
+            icon: SVGGitHub,
+        };
+    } else if (key === "telegram") {
+        return {
+            ...elem,
+            icon: SVGTelegram,
+        };
+    }
+    return elem;
+});
+---
+
+<div class="contacts container" id="block-contacts">
+    <h2 class="contacts__title">Контакты</h2>
+    <div class="contacts__appeal">
+        Готов помочь воплотить ваши идеи в жизнь.
+    </div>
+    <div class="contacts__list">
+        {
+            contacts.map((contact) => {
+                return (
+                    contact.contact && (
+                        <a
+                            class="contacts__item"
+                            href={contact.contact}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <contact.icon />
+                            <span>{contact.title}</span>
+                        </a>
+                    )
+                );
+            })
+        }
+    </div>
+    <div class="contacts__appeal">
+        Рассматриваю предложения о сотрудничестве и полной занятости.
+    </div>
+</div>
+
+<style lang="scss">
+    .contacts {
+        padding-bottom: clamp(3em, 10vw, 5em);
+
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
+
+        &__title {
+            font-size: 1.8em;
+            padding-bottom: 1em;
+            color: var(--color-basic-white);
+            font-weight: 700;
+            gap: 0.5em;
+        }
+
+        &__appeal {
+            font-size: 0.8em;
+            color: var(--color-basic-white-80);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        &__list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1em;
+        }
+
+        &__item {
+            padding: 0.5em 1.15em 0.5em 1em;
+            border-radius: 6px;
+            background-color: var(--color-bg);
+            color: var(--color-basic-white-80);
+            cursor: pointer;
+            user-select: none;
+            overflow: hidden;
+            font-size: clamp(0.63em, 1.5vw, 1em);
+            font-weight: 500;
+
+            text-decoration: none;
+
+            border: 1px solid currentColor;
+
+            transition:
+                color 300ms ease-in-out,
+                transform 200ms ease-in-out,
+                background-color 300ms ease-in-out;
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            gap: 0.8em;
+
+            &::after {
+                position: absolute;
+                inset: 0;
+                content: "";
+                background-color: transparent;
+                transition: background-color 300ms ease-in-out;
+            }
+
+            &:hover {
+                color: var(--color-azure);
+                background-color: #000;
+                transform: translateY(-2px);
+
+                &::after {
+                    background-color: var(--color-button-hover-bg);
+                }
+            }
+
+            svg {
+                width: 1.2em;
+                height: 1.2em;
+            }
+        }
+    }
+</style>

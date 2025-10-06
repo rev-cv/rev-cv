@@ -10,6 +10,6 @@ export interface TypeCase {
 }
 
 export interface TypeProjectCase {
-    metadate: TypeCase;
+    metadata: TypeCase;
     htmlContent: string;
 }

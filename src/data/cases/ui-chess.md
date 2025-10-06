@@ -8,9 +8,6 @@ tech:
     - "SCSS"
 video: "2025-09-11 14-36-31.mp4"
 pictures:
-    - "01k5p06a9fewgv0e2f4y48yh7j_1758453799_img_0.webp"
-    - "01k5p06a9fewgv0e2f4y48yh7j_1758453799_img_0.webp"
-    - "01k5p06a9fewgv0e2f4y48yh7j_1758453799_img_0.webp"
 code_url: "https://github.com/rev-cv/test-chess"
 demo_url: "https://rev-cv.github.io/test-chess/"
 macket_url: "https://www.figma.com/design/I5wDz9ltYBF7hVOIfqrRNK"

@@ -1,0 +1,82 @@
+---
+import education from "../data/education.json";
+---
+
+<div class="education container">
+    <h2 class="education__title">Образование</h2>
+
+    {
+        education.map((item) => {
+            return (
+                <div class="education__item">
+                    <div class="education__item-institution">
+                        {item.institution}
+                    </div>
+                    <div class="education__item-field">{item.field}</div>
+                </div>
+            );
+        })
+    }
+</div>
+
+<style lang="scss">
+    .education {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        padding-bottom: clamp(3em, 10vw, 5em);
+
+        * {
+            color: var(--color-basic-white);
+        }
+
+        &__title {
+            font-size: 1.8em;
+            padding-bottom: 1em;
+            color: var(--color-basic-white);
+            font-weight: 700;
+            gap: 0.5em;
+        }
+
+        &__item {
+            background-color: var(--color-black);
+            padding: 2em 1.2em;
+            border-radius: 0.5em;
+            width: 100%;
+            max-width: 40em;
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+
+            &-institution {
+                font-size: 1.1em;
+                line-height: 1.1em;
+                font-weight: 700;
+                text-wrap: balance;
+                text-align: center;
+                color: var(--color-basic-white);
+            }
+
+            &-field,
+            &-degree,
+            &-duration {
+                font-size: 0.8em;
+                line-height: 1.1em;
+                font-weight: 400;
+                text-wrap: balance;
+                text-align: center;
+                color: var(--color-basic-white-80);
+                margin-top: 0.3em;
+            }
+
+            &-degree {
+                font-style: italic;
+                font-size: 0.7em;
+            }
+
+            &-duration {
+                font-size: 0.6em;
+            }
+        }
+    }
+</style>

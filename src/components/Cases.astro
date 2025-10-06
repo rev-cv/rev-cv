@@ -1,0 +1,40 @@
+---
+import Case from "../components/Case.svelte";
+import type { TypeProjectCase } from "../types/TypeCase";
+const { cases } = Astro.props;
+---
+
+<div class="portfolio-cases container">
+    <h2>Кейсы</h2>
+    {
+        cases.map((c: TypeProjectCase) => (
+            <Case client:only metadata={c.metadata} content={c.htmlContent} />
+        ))
+    }
+</div>
+
+<style lang="scss">
+    .portfolio-cases {
+        margin-bottom: 4em;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+        grid-template-rows: auto;
+        grid-auto-rows: minmax(auto, 500px);
+        gap: 1em;
+        scroll-margin-top: 10vw;
+
+        h2 {
+            grid-column: 1 / -1;
+            font-size: 1.8em;
+            color: var(--color-basic-white);
+            font-weight: 700;
+            padding-bottom: 1em;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .portfolio-cases {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

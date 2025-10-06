@@ -15,6 +15,8 @@
         --height: ${Math.round(rect.height)}px;
     `;
 
+    let isOpenMedia = $state(false);
+
     let style = $state(initialStyle);
 
     $effect(() => {
@@ -54,6 +56,55 @@
             unmounte();
         }
     }
+
+    function previewMedia(e) {
+        const button = e.currentTarget;
+        const video = button.querySelector("video, img");
+
+        if (!isOpenMedia) {
+            const previewRect = button.getBoundingClientRect();
+            button._previewRect = previewRect;
+
+            video.style.position = "absolute";
+            video.style.top = `.6em`;
+            video.style.left = `-17.5em`;
+            video.style.width = `${previewRect.width}px`;
+            video.style.height = `${previewRect.height}px`;
+            video.style.zIndex = "103";
+
+            requestAnimationFrame(() => {
+                video.style.transition = "all 200ms ease-in-out";
+                video.style.transform = "scale(1.02)";
+                video.style.top = "0";
+                video.style.left = "0";
+                video.style.width = "100%";
+                video.style.height = "100%";
+            });
+
+            setTimeout(() => {
+                video.style.backgroundColor = "#000";
+                isOpenMedia = true;
+            }, 400);
+        } else {
+            const previewRect = button._previewRect;
+
+            if (!previewRect) return;
+
+            video.style.transition = "all 200ms ease-in-out";
+
+            video.style.top = `.6em`;
+            video.style.left = `-17.5em`;
+            video.style.width = `${previewRect.width}px`;
+            video.style.height = `${previewRect.height}px`;
+            video.style.backgroundColor = "";
+
+            setTimeout(() => {
+                video.style.cssText = "";
+                e.target.style.minHeight = "";
+                isOpenMedia = false;
+            }, 200);
+        }
+    }
 </script>
 
 <div
@@ -78,20 +129,24 @@
         aria-modal="true"
     >
         <div class="left-scroll">
-            <video
-                src={metadata.video}
-                preload="metadata"
-                autoplay="autoplay"
-                playsinline="playsinline"
-                loop="loop"
-                muted="muted"
-                data-fetchpriority="low"
-            ></video>
+            <button onclick={previewMedia} title="100%">
+                <video
+                    src={metadata.video}
+                    preload="metadata"
+                    autoplay="autoplay"
+                    playsinline="playsinline"
+                    loop="loop"
+                    muted="muted"
+                    data-fetchpriority="low"
+                ></video>
+            </button>
 
             {#each metadata.pictures as pic}
-                <picture>
-                    <img src={pic} alt="" />
-                </picture>
+                <button onclick={previewMedia} title="100%">
+                    <picture>
+                        <img src={pic} alt="" />
+                    </picture>
+                </button>
             {/each}
         </div>
 
@@ -206,10 +261,23 @@
                     height: auto;
                     object-fit: contain;
                     border-radius: $border_radius - $padding_in_item;
+
+                    transition:
+                        width 300ms ease-in-out 100ms,
+                        height 300ms ease-in-out 100ms;
                 }
 
                 img {
                     border-radius: $border_radius - $padding_in_item;
+                }
+
+                button {
+                    border: none;
+                    background: none;
+                    padding: 0;
+                    margin: 0;
+                    cursor: pointer;
+                    transition: height 300ms ease-in-out;
                 }
             }
 

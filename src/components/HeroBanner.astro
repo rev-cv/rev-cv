@@ -49,15 +49,12 @@ for (const path in portfoliosJSON) {
 
 <div class="hero-banner">
     <picture class="hero-banner__bg">
-        <img
-            src="15-Black-Paper-Different-Texture-Types-A4-Matrix.jpg"
-            alt="Placeholder"
-        />
+        <img src="hero-banner-bg.webp" alt="Placeholder" />
     </picture>
     <div class="hero-banner__content container">
         <div class="hero-banner__my-name">Revin Roman</div>
         <div class="hero-banner__my-job">
-            <button>{resume.jobtitle}</button>
+            <button><h1>{resume.jobtitle}</h1></button>
             <div>
                 <div>
                     {
@@ -75,8 +72,8 @@ for (const path in portfoliosJSON) {
         <div class="hero-banner__descr">{resume.description}</div>
 
         <div class="hero-banner__btns">
-            <button>Мои проекты</button>
-            <button>Связаться со мной</button>
+            <button id="move-to-cases">Мои проекты</button>
+            <button id="move-to-contacts">Связаться со мной</button>
         </div>
 
         <div class="hero-banner__social-media">
@@ -129,6 +126,10 @@ for (const path in portfoliosJSON) {
         display: flex;
         flex-direction: column;
         justify-content: center;
+
+        h1 {
+            font-size: 1em;
+        }
 
         &__bg {
             position: absolute;
@@ -493,5 +494,23 @@ for (const path in portfoliosJSON) {
                 hideListPortfolio();
             }
         });
+
+        document
+            .querySelector("#move-to-cases")
+            ?.addEventListener("click", () => {
+                const block = document.querySelector(".portfolio-cases");
+                if (block) {
+                    block.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+
+        document
+            .querySelector("#move-to-contacts")
+            ?.addEventListener("click", () => {
+                const block = document.querySelector("#block-contacts");
+                if (block) {
+                    block.scrollIntoView({ behavior: "smooth" });
+                }
+            });
     });
 </script>
