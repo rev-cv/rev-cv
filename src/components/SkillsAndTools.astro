@@ -5,7 +5,7 @@ const { items, title, isSkills = false } = Astro.props;
 
 const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
 
-console.log(s_items);
+// console.log(s_items);
 ---
 
 <div class={`my-item container${isSkills ? " skills" : " tools"}`}>

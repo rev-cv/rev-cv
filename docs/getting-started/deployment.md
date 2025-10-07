@@ -47,22 +47,23 @@ SITE_URL=https://your-domain.com
 ### 1. Автоматический деплой через GitHub
 
 1. Подключите репозиторий к Vercel:
-   - Перейдите на [vercel.com](https://vercel.com)
-   - Нажмите "New Project"
-   - Выберите ваш GitHub репозиторий
-   - Настройте параметры сборки
+    - Перейдите на [vercel.com](https://vercel.com)
+    - Нажмите "New Project"
+    - Выберите ваш GitHub репозиторий
+    - Настройте параметры сборки
 
 2. Настройки сборки:
-   ```
-   Framework Preset: Astro
-   Build Command: npm run build
-   Output Directory: dist
-   Install Command: npm install
-   ```
+
+    ```
+    Framework Preset: Astro
+    Build Command: npm run build
+    Output Directory: dist
+    Install Command: npm install
+    ```
 
 3. Деплой:
-   - Vercel автоматически соберет и развернет проект
-   - Каждый push в main ветку будет запускать новый деплой
+    - Vercel автоматически соберет и развернет проект
+    - Каждый push в main ветку будет запускать новый деплой
 
 ### 2. Ручной деплой через CLI
 
@@ -89,31 +90,33 @@ vercel --prod
 ### 4. Переменные окружения
 
 В панели Vercel:
+
 1. Перейдите в Settings → Environment Variables
 2. Добавьте необходимые переменные:
-   ```
-   NODE_ENV=production
-   SITE_URL=https://your-domain.com
-   ```
+    ```
+    NODE_ENV=production
+    SITE_URL=https://your-domain.com
+    ```
 
 ## Netlify
 
 ### 1. Автоматический деплой
 
 1. Подключите репозиторий к Netlify:
-   - Перейдите на [netlify.com](https://netlify.com)
-   - Нажмите "New site from Git"
-   - Выберите ваш репозиторий
+    - Перейдите на [netlify.com](https://netlify.com)
+    - Нажмите "New site from Git"
+    - Выберите ваш репозиторий
 
 2. Настройки сборки:
-   ```
-   Build command: npm run build
-   Publish directory: dist
-   ```
+
+    ```
+    Build command: npm run build
+    Publish directory: dist
+    ```
 
 3. Деплой:
-   - Netlify автоматически соберет и развернет проект
-   - Каждый push в main ветку будет запускать новый деплой
+    - Netlify автоматически соберет и развернет проект
+    - Каждый push в main ветку будет запускать новый деплой
 
 ### 2. Ручной деплой через CLI
 
@@ -147,37 +150,60 @@ netlify deploy --prod --dir=dist
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches:
+            - main
+
+# Разрешения для GITHUB_TOKEN для развертывания на GitHub Pages
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+# Разрешаем только один одновременный деплой, отменяя предыдущие запуски
+concurrency:
+    group: "pages"
+    cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build
-      run: npm run build
-      
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build
+              run: npm run build
+              env:
+                  BASE_URL: /${{ github.event.repository.name }}
+
+            - name: Setup Pages
+              uses: actions/configure-pages@v4
+
+            - name: Upload artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: ./dist
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
 ```
 
 ### 2. Настройка репозитория
@@ -207,20 +233,16 @@ firebase init hosting
 
 ```json
 {
-  "hosting": {
-    "public": "dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
+    "hosting": {
+        "public": "dist",
+        "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+        "rewrites": [
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
+    }
 }
 ```
 
@@ -308,12 +330,17 @@ docker run -p 80:80 revin-portfolio
 
 ```html
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_MEASUREMENT_ID');
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "GA_MEASUREMENT_ID");
 </script>
 ```
 
@@ -322,13 +349,13 @@ docker run -p 80:80 revin-portfolio
 ```html
 <!-- Web Vitals -->
 <script>
-  function sendToAnalytics(metric) {
-    gtag('event', metric.name, {
-      value: Math.round(metric.value),
-      event_label: metric.id,
-      non_interaction: true,
-    });
-  }
+    function sendToAnalytics(metric) {
+        gtag("event", metric.name, {
+            value: Math.round(metric.value),
+            event_label: metric.id,
+            non_interaction: true,
+        });
+    }
 </script>
 ```
 
@@ -336,9 +363,9 @@ docker run -p 80:80 revin-portfolio
 
 ```javascript
 // Отслеживание ошибок
-window.addEventListener('error', (event) => {
-  console.error('Error:', event.error);
-  // Отправка в сервис мониторинга
+window.addEventListener("error", (event) => {
+    console.error("Error:", event.error);
+    // Отправка в сервис мониторинга
 });
 ```
 
@@ -348,26 +375,26 @@ window.addEventListener('error', (event) => {
 
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  build: {
-    assets: 'assets',
-    inlineStylesheets: 'auto'
-  },
-  compressHTML: true,
-  vite: {
     build: {
-      minify: 'terser',
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom']
-          }
-        }
-      }
-    }
-  }
+        assets: "assets",
+        inlineStylesheets: "auto",
+    },
+    compressHTML: true,
+    vite: {
+        build: {
+            minify: "terser",
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        vendor: ["react", "react-dom"],
+                    },
+                },
+            },
+        },
+    },
 });
 ```
 
@@ -398,7 +425,7 @@ export default defineConfig({
 
 ```html
 <!-- Замените локальные пути на CDN -->
-<link rel="stylesheet" href="https://cdn.example.com/styles.css">
+<link rel="stylesheet" href="https://cdn.example.com/styles.css" />
 <script src="https://cdn.example.com/script.js"></script>
 ```
 
@@ -410,8 +437,11 @@ export default defineConfig({
 
 ```javascript
 // Проверка HTTPS
-if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-  location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+if (location.protocol !== "https:" && location.hostname !== "localhost") {
+    location.replace(
+        "https:" +
+            window.location.href.substring(window.location.protocol.length),
+    );
 }
 ```
 
@@ -445,7 +475,10 @@ if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
 ### 3. CSP (Content Security Policy)
 
 ```html
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+<meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+/>
 ```
 
 ## Troubleshooting
@@ -468,9 +501,9 @@ npm run build
 // Убедитесь, что base URL настроен правильно
 // astro.config.mjs
 export default defineConfig({
-  base: '/your-repo-name/', // для GitHub Pages
-  // или
-  base: '/', // для корневого домена
+    base: "/your-repo-name/", // для GitHub Pages
+    // или
+    base: "/", // для корневого домена
 });
 ```
 
@@ -499,20 +532,20 @@ export default defineConfig({
 name: Deploy
 
 on:
-  push:
-    branches: [ main ]
+    push:
+        branches: [main]
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    - run: npm ci
-    - run: npm run build
-    - run: npm run deploy
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: "18"
+            - run: npm ci
+            - run: npm run build
+            - run: npm run deploy
 ```
 
 ### 2. Скрипты деплоя
@@ -521,10 +554,10 @@ jobs:
 
 ```json
 {
-  "scripts": {
-    "deploy": "npm run build && vercel --prod",
-    "deploy:netlify": "npm run build && netlify deploy --prod --dir=dist"
-  }
+    "scripts": {
+        "deploy": "npm run build && vercel --prod",
+        "deploy:netlify": "npm run build && netlify deploy --prod --dir=dist"
+    }
 }
 ```
 
@@ -553,6 +586,7 @@ netlify logs
 ### 3. Алерты
 
 Настройте алерты для:
+
 - Время отклика > 2 секунд
 - Ошибки 5xx > 1%
 - Доступность < 99.9%

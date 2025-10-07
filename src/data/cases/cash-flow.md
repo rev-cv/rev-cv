@@ -8,7 +8,7 @@ tech:
     - "ORM"
     - "Svelte"
     - "SCSS"
-video: "2025-09-30 06-54-45.mp4"
+video: "/vid/2025-09-30 06-54-45.mp4"
 pictures:
 code_url: "https://github.com/rev-cv/test-cash-flow"
 demo_url: ""
