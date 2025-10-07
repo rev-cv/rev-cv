@@ -3,6 +3,7 @@
     import SVGDemo from "../assets/SVGDemo.svelte";
     import SVGCode from "../assets/SVGCode.svelte";
     import SVGFigma from "../assets/SVGFigma.svelte";
+    import SVGClose from "../assets/SVGClose.svelte";
 
     let { metadata, content, unmounte, rect } = $props();
 
@@ -19,25 +20,41 @@
 
     let style = $state(initialStyle);
 
+    function updateStyleForScreenSize() {
+        // Обновляем стиль только если модальное окно полностью открыто,
+        const rectMobile = `
+            --transform: translate(calc(50vw - 50%), calc(50vh - 50%)); 
+            --width: 100%;
+            --height: 100vh;
+        `;
+
+        const rectDesktop = `
+            --transform: translate(calc(50vw - 50%), calc(50vh - 50%)); 
+            --width: 80%;
+            --height: 70vh;
+        `;
+
+        if (isModalView) {
+            style = window.innerWidth >= 1144 ? rectDesktop : rectMobile;
+        }
+    }
+
     $effect(() => {
         setTimeout(() => {
             isModalView = true;
-            style = `
-                --transform: translate(calc(50vw - 50%), calc(50vh - 50%)); 
-                --width: 80%;
-                --height: 70vh;
-                `;
+            updateStyleForScreenSize();
         }, 10);
 
         document.addEventListener("keydown", handleKeydown);
-
+        window.addEventListener("resize", updateStyleForScreenSize);
         return () => {
             document.removeEventListener("keydown", handleKeydown);
+            window.removeEventListener("resize", updateStyleForScreenSize);
         };
     });
 
     function closeModal() {
-        // Шаг 1: Начинаем анимацию закрытия (меняем стили)
+        // старт анимации закрытия модального окна
         style = initialStyle;
         isModalView = false;
     }
@@ -48,41 +65,47 @@
         }
     }
 
-    // Шаг 2: Удаление из DOM
     function handleTransitionEnd(e) {
-        // Убеждаемся, что переход закончился именно на нужных свойствах (например, transform)
-        // и только при закрытии (когда isView: false).
+        // удаление модального окна из DOM
         if (e.propertyName === "transform" && !isModalView) {
             unmounte();
         }
     }
 
     function previewMedia(e) {
+        if (window.innerWidth < 1144) return;
+
         const button = e.currentTarget;
-        const video = button.querySelector("video, img");
+        const media = button.querySelector(".video-wrapper, img");
+
+        const previewRect = button.getBoundingClientRect();
+        button._previewRect = previewRect;
+
+        const modalRect = modalElement.getBoundingClientRect();
+        const relativeTop = previewRect.top - modalRect.top;
+        const relativeLeft = previewRect.left - modalRect.left;
 
         if (!isOpenMedia) {
-            const previewRect = button.getBoundingClientRect();
-            button._previewRect = previewRect;
+            button.style.minHeight = `${previewRect.height}px`;
 
-            video.style.position = "absolute";
-            video.style.top = `.6em`;
-            video.style.left = `-17.5em`;
-            video.style.width = `${previewRect.width}px`;
-            video.style.height = `${previewRect.height}px`;
-            video.style.zIndex = "103";
+            media.style.position = "absolute";
+            media.style.top = `${relativeTop}px`;
+            media.style.left = `${relativeLeft}px`;
+            media.style.width = `${previewRect.width}px`;
+            media.style.height = `${previewRect.height}px`;
+            media.style.zIndex = "103";
+            media.style.transition = "all 200ms ease-in-out";
 
             requestAnimationFrame(() => {
-                video.style.transition = "all 200ms ease-in-out";
-                video.style.transform = "scale(1.02)";
-                video.style.top = "0";
-                video.style.left = "0";
-                video.style.width = "100%";
-                video.style.height = "100%";
+                // media.style.transform = "scale(1.01)";
+                media.style.top = "0px";
+                media.style.left = "0px";
+                media.style.width = "100%";
+                media.style.height = "100%";
             });
 
             setTimeout(() => {
-                video.style.backgroundColor = "#000";
+                media.style.backgroundColor = "var(--color-black)";
                 isOpenMedia = true;
             }, 400);
         } else {
@@ -90,18 +113,19 @@
 
             if (!previewRect) return;
 
-            video.style.transition = "all 200ms ease-in-out";
+            media.style.transition = "all 200ms ease-in-out";
 
-            video.style.top = `.6em`;
-            video.style.left = `-17.5em`;
-            video.style.width = `${previewRect.width}px`;
-            video.style.height = `${previewRect.height}px`;
-            video.style.backgroundColor = "";
+            media.style.top = `${relativeTop}px`;
+            media.style.left = `${relativeLeft}px`;
+            media.style.width = `${previewRect.width}px`;
+            media.style.height = `${previewRect.height}px`;
+            media.style.backgroundColor = "";
 
             setTimeout(() => {
-                video.style.cssText = "";
+                media.style.cssText = "";
                 e.target.style.minHeight = "";
                 isOpenMedia = false;
+                button.style.minHeight = ``;
             }, 200);
         }
     }
@@ -111,38 +135,48 @@
     class="curtain"
     class:render={isModalView}
     onclick={closeModal}
-    onkeypress={() => {}}
+    onkeydown={(e) => e.key === "Enter" && closeModal()}
     aria-label="Закрыть модальное окно"
     role="button"
-    tabindex="0"
+    tabindex="-1"
 >
     <div
         class="modal"
         id="modal-case"
         {style}
-        onkeydown={(e) => e.stopPropagation()}
         bind:this={modalElement}
         ontransitionend={handleTransitionEnd}
         onclick={(e) => e.stopPropagation()}
+        onkeydown={(e) => e.stopPropagation()}
         role="dialog"
         tabindex="-1"
         aria-modal="true"
     >
         <div class="left-scroll">
-            <button onclick={previewMedia} title="100%">
-                <video
-                    src={metadata.video}
-                    preload="metadata"
-                    autoplay="autoplay"
-                    playsinline="playsinline"
-                    loop="loop"
-                    muted="muted"
-                    data-fetchpriority="low"
-                ></video>
+            <button
+                onclick={previewMedia}
+                title="100%"
+                tabindex={isOpenMedia ? -1 : 0}
+            >
+                <div class="video-wrapper">
+                    <video
+                        src={metadata.video}
+                        preload="metadata"
+                        autoplay="autoplay"
+                        playsinline="playsinline"
+                        loop="loop"
+                        muted="muted"
+                        data-fetchpriority="low"
+                    ></video>
+                </div>
             </button>
 
             {#each metadata.pictures as pic}
-                <button onclick={previewMedia} title="100%">
+                <button
+                    onclick={previewMedia}
+                    title="100%"
+                    tabindex={isOpenMedia ? -1 : 0}
+                >
                     <picture>
                         <img src={pic} alt="" />
                     </picture>
@@ -153,17 +187,19 @@
         <div class="right-scroll">
             <div class="case-nav">
                 {#if metadata.code_url}
-                    <a href={metadata.code_url}>
+                    <a href={metadata.code_url} tabindex={isOpenMedia ? -1 : 0}>
                         <SVGCode /> <span>code</span>
                     </a>
                 {/if}
                 {#if metadata.demo_url}
-                    <a href={metadata.demo_url}>
+                    <a href={metadata.demo_url} tabindex={isOpenMedia ? -1 : 0}>
                         <SVGDemo /> <span>demo</span>
                     </a>
                 {/if}
                 {#if metadata.macket_url}
-                    <a href={metadata.macket_url}
+                    <a
+                        href={metadata.macket_url}
+                        tabindex={isOpenMedia ? -1 : 0}
                         ><SVGFigma /> <span>layout</span></a
                     >
                 {/if}
@@ -175,23 +211,27 @@
 
             <div class="case-nav">
                 {#if metadata.code_url}
-                    <a href={metadata.code_url}>
+                    <a href={metadata.code_url} tabindex={isOpenMedia ? -1 : 0}>
                         <SVGCode /> <span>code</span>
                     </a>
                 {/if}
                 {#if metadata.demo_url}
-                    <a href={metadata.demo_url}>
+                    <a href={metadata.demo_url} tabindex={isOpenMedia ? -1 : 0}>
                         <SVGDemo /> <span>demo</span>
                     </a>
                 {/if}
                 {#if metadata.macket_url}
-                    <a href={metadata.macket_url}
+                    <a
+                        href={metadata.macket_url}
+                        tabindex={isOpenMedia ? -1 : 0}
                         ><SVGFigma /> <span>layout</span></a
                     >
                 {/if}
             </div>
         </div>
     </div>
+
+    <button class="close" onclick={closeModal}><SVGClose /></button>
 </div>
 
 <style lang="scss">
@@ -253,15 +293,21 @@
                     height: 0px;
                 }
 
+                .video-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
                 video,
                 picture {
                     width: 100%;
+                    height: 100%;
                     flex-grow: 0;
                     min-width: 100%;
                     height: auto;
                     object-fit: contain;
                     border-radius: $border_radius - $padding_in_item;
-
                     transition:
                         width 300ms ease-in-out 100ms,
                         height 300ms ease-in-out 100ms;
@@ -282,15 +328,18 @@
             }
 
             .right-scroll {
-                font-size: 0px;
                 overflow-y: auto;
                 padding-right: $padding_in_item;
                 display: flex;
                 flex-direction: column;
-                // opacity: 0;
-                transition:
-                    font-size 300ms ease-in-out 400ms,
-                    opacity 300ms ease-in-out 500ms;
+
+                > * {
+                    opacity: 0;
+                    transform: translateY(1em);
+                    transition:
+                        opacity 300ms ease-out,
+                        transform 300ms ease-out;
+                }
 
                 .title {
                     color: var(--color-basic-white);
@@ -358,7 +407,111 @@
                             }
                         }
                     }
+
+                    :global(svg) {
+                        width: 1.3em;
+                        height: 1.3em;
+                        opacity: 0.8;
+                    }
+
+                    :global(:is(a)) {
+                        color: var(--color-azure);
+                        text-decoration: none;
+                        opacity: 0.9;
+                        transition: opacity 300ms ease-in-out;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
                 }
+
+                :global(:is(a)) {
+                    color: var(--color-azure);
+                    text-decoration: none;
+                    opacity: 0.9;
+                    transition: opacity 300ms ease-in-out;
+
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
+
+                :global(:is(li)) {
+                    padding: 0.5em 0 0.5em 1.6em;
+                    display: flex;
+                    position: relative;
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        width: 0.25em;
+                        height: 0.25em;
+                        top: 0.6em + 0.5em;
+                        left: 0.5em;
+                        background-color: var(--color-basic-white-80);
+                        border-radius: 50%;
+                    }
+                }
+
+                :global(img) {
+                    object-fit: contain;
+                }
+
+                :global(:is(p:has(img))) {
+                    max-height: 25em;
+                    overflow: hidden;
+                    border-radius: $border_radius;
+                    padding: 0;
+                    margin: 1em 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                :global(:is(h4, h5, h6, h1, h2, h3)) {
+                    font-size: 1.2em;
+                    padding: 1em 0 0.2em 0;
+                    color: var(--color-basic-white-80);
+                }
+
+                :global(:is(p, li)) {
+                    font-size: 0.9em;
+                }
+
+                :global(:is(p, ul)) {
+                    padding: 1em 0 0.1em 0;
+                }
+            }
+        }
+
+        .close {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--color-basic-white-80);
+            width: 3.1em;
+            height: 3.1em;
+            padding: 0;
+            background-color: var(--color-black-60);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+
+            opacity: 0;
+            scale: 0;
+            transition:
+                scale 300ms ease-in-out,
+                opacity 300ms ease-in-out;
+
+            &:hover :global(svg) {
+                width: 80%;
+                height: 80%;
             }
         }
 
@@ -375,73 +528,77 @@
                     transform 300ms ease-in-out;
 
                 .right-scroll {
-                    font-size: 1em;
-                    opacity: 1;
+                    > * {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+
+                    @for $i from 1 through 5 {
+                        > *:nth-child(#{$i}) {
+                            transition-delay: #{300 + ($i - 1) * 100}ms;
+                        }
+                    }
                 }
+            }
+
+            .close {
+                opacity: 1;
+                scale: 1;
+                transition:
+                    scale 300ms ease-in-out 300ms,
+                    opacity 300ms ease-in-out 300ms;
             }
         }
     }
 
-    :global(#modal-case .right-scroll :is(h4, h5, h6, h1, h2, h3)) {
-        font-size: 1.2em;
-        padding: 1em 0 0.2em 0;
-        color: var(--color-basic-white-80);
-    }
+    @media (max-width: 1144px) {
+        .curtain.render {
+            background-color: var(--color-black) !important;
+            backdrop-filter: blur(0px);
 
-    :global(#modal-case .right-scroll :is(p, li)) {
-        font-size: 0.9em;
-    }
+            .close {
+                top: initial;
+                bottom: 7em;
+                right: 1em;
+                background-color: #000;
+            }
 
-    :global(#modal-case .right-scroll :is(p, ul)) {
-        padding: 1em 0 0.1em 0;
-    }
+            .modal {
+                grid-template-columns: 1fr;
+                overflow-y: scroll;
+                display: block;
+                background-color: transparent;
+                border-radius: 0;
 
-    :global(#modal-case .right-scroll :is(p:has(img))) {
-        max-height: 25em;
-        overflow: hidden;
-        border-radius: $border_radius;
-        padding: 0;
-        margin: 1em 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+                .left-scroll,
+                .right-scroll {
+                    overflow-x: hidden;
+                    overflow-y: visible !important;
+                    padding-right: $padding_in_item;
+                    align-self: start;
+                    border-top-left-radius: 0 !important;
+                    border-bottom-left-radius: 0 !important;
+                }
 
-    :global(#modal-case .right-scroll img) {
-        object-fit: contain;
-    }
+                video,
+                picture,
+                img,
+                :global(:is(p:has(img))) {
+                    border-radius: 0;
+                }
 
-    :global(#modal-case .right-scroll :is(li)) {
-        padding: 0.5em 0 0.5em 1.6em;
-        display: flex;
-        position: relative;
+                .left-scroll {
+                    padding-bottom: 1em;
+                }
 
-        &::before {
-            content: "";
-            position: absolute;
-            width: 0.25em;
-            height: 0.25em;
-            top: 0.6em + 0.5em;
-            left: 0.5em;
-            background-color: var(--color-basic-white-80);
-            border-radius: 50%;
-        }
-    }
+                .case-nav:first-child {
+                    display: none;
+                }
 
-    :global(#modal-case .right-scroll .case-nav svg) {
-        width: 1.3em;
-        height: 1.3em;
-        opacity: 0.8;
-    }
-
-    :global(#modal-case .right-scroll :is(a)) {
-        color: var(--color-azure);
-        text-decoration: none;
-        opacity: 0.9;
-        transition: opacity 300ms ease-in-out;
-
-        &:hover {
-            opacity: 1;
+                .case-nav {
+                    padding: 1em 0 2em 0;
+                }
+            }
         }
     }
 </style>

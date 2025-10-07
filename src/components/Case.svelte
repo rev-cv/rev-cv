@@ -32,6 +32,7 @@
         isModalOpen = cardNode.getBoundingClientRect();
     }}
     bind:this={cardNode}
+    tabindex="-1"
 >
     <div class="case-item__title">
         <h3>{metadata.title}</h3>
