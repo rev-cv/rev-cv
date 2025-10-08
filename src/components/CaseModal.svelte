@@ -160,7 +160,7 @@
             >
                 <div class="video-wrapper">
                     <video
-                        src={metadata.video}
+                        src={`${import.meta.env.BASE_URL}${metadata.video}`}
                         preload="metadata"
                         autoplay="autoplay"
                         playsinline="playsinline"
@@ -178,7 +178,7 @@
                     tabindex={isOpenMedia ? -1 : 0}
                 >
                     <picture>
-                        <img src={pic} alt="" />
+                        <img src={`${import.meta.env.BASE_URL}${pic}`} alt="" />
                     </picture>
                 </button>
             {/each}

@@ -1,18 +1,19 @@
 ---
 import SVGFeather from "../assets/feather.svg";
+const base = import.meta.env.BASE_URL;
 ---
 
 <header>
     <div>
         <menu class="container">
             <div class="navigator">
-                <a href="/about-me">Обо мне</a>
-                <a href="/portfolio">Портфолио</a>
-                <a href="/cases">Кейсы</a>
-                <a href="/skills">Навыки</a>
-                <a href="/contacts">Контакты</a>
+                <a href={`${base}about-me`}>Обо мне</a>
+                <a href={`${base}portfolio`}>Портфолио</a>
+                <a href={`${base}cases`}>Кейсы</a>
+                <a href={`${base}skills`}>Навыки</a>
+                <a href={`${base}contacts`}>Контакты</a>
             </div>
-            <a href=""><SVGFeather /></a>
+            <a href={base}><SVGFeather /></a>
         </menu>
     </div>
 </header>

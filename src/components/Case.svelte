@@ -40,7 +40,7 @@
 
     <div class="case-item__preview">
         <video
-            src={metadata.video}
+            src={`${import.meta.env.BASE_URL}${metadata.video}`}
             preload="metadata"
             autoplay="autoplay"
             playsinline="playsinline"

@@ -6,7 +6,7 @@ tech:
     - "No Frameworks"
     - "Vanilla JS"
     - "SCSS"
-video: "/vid/2025-09-11 14-36-31.mp4"
+video: "vid/2025-09-11 14-36-31.mp4"
 pictures:
 code_url: "https://github.com/rev-cv/test-chess"
 demo_url: "https://rev-cv.github.io/test-chess/"
