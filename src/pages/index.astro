@@ -2,10 +2,8 @@
 // import Layout from "../layouts/Layout.astro";
 import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
-/**
- * Загружает все JSON файлы портфолио из папки portfolios
- * Использует import.meta.glob для динамической загрузки
- */
+// все JSON файлы портфолио из папки portfolios
+// import.meta.glob для динамической загрузки
 const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
     "../data/portfolios/*.json",
     {
@@ -13,22 +11,21 @@ const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
     }
 );
 
-/**
- * Создает массив всех доступных портфолио
- */
+// массив всех доступных портфолио
 const allPortfolios: PortfolioItem[] = [];
 for (const path in portfoliosJSON) {
     const portfolio = portfoliosJSON[path].default;
     allPortfolios.push(portfolio);
 }
 
-/**
- * Перенаправляем на первое доступное резюме
- * Если резюме нет, перенаправляем на about-me
- */
+// перенаправление на первое доступное резюме
 if (allPortfolios.length > 0) {
-    return Astro.redirect(`/${allPortfolios[0].url}`);
+    // Используем import.meta.env.BASE_URL и добавляем слэш в конце
+    // для совместимости с `trailingSlash: 'always'`.
+    const redirectUrl = `${import.meta.env.BASE_URL}${allPortfolios[0].url}/`;
+    return Astro.redirect(redirectUrl);
+    // Если резюме нет, перенаправляем на about-me
 } else {
-    return Astro.redirect("/about-me");
+    return Astro.redirect(`${import.meta.env.BASE_URL}about-me/`);
 }
 ---

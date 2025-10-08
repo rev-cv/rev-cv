@@ -470,9 +470,10 @@
                 }
 
                 :global(:is(h4, h5, h6, h1, h2, h3)) {
-                    font-size: 1.2em;
-                    padding: 1em 0 0.2em 0;
+                    font-size: 1.3em;
+                    padding: 1.2em 0 0 0;
                     color: var(--color-basic-white-80);
+                    margin-bottom: -0.3em;
                 }
 
                 :global(:is(p, li)) {
@@ -481,6 +482,14 @@
 
                 :global(:is(p, ul)) {
                     padding: 1em 0 0.1em 0;
+                }
+
+                :global(ul li:first-child) {
+                    padding-top: 0;
+                }
+
+                :global(ul li:last-child) {
+                    padding-bottom: 0;
                 }
             }
         }
