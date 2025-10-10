@@ -1,9 +1,9 @@
 {
-    "jobtitle": "React Developer",
+    "jobtitle": "Rust Developer",
     "description": "Создаю современные и функциональные веб-приложения с фокусом на пользовательский опыт. Специализируюсь на React, TypeScript и современных технологиях фронтенда.",
-    "url": "react-dev",
+    "url": "rust-dev",
     "cases": [],
-    "cover": "seo/frontend-developer.webp",
+    "cover": "seo/rust-developer.webp",
     "keywords": [
         "frontend developer",
         "front-end",

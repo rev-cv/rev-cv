@@ -7,7 +7,6 @@
     let cardNode;
 
     function scrollLock(isLock) {
-        // isLock == true | false
         if (isLock) {
             const cwa = document.body.clientWidth;
             document.body.style.overflow = "hidden";
@@ -81,6 +80,7 @@
         overflow: hidden;
         display: flex;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
 
         &__title {
             position: absolute;
@@ -156,6 +156,20 @@
                 border-radius: 1em;
                 backdrop-filter: blur(2px);
                 user-select: none;
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        .case-item {
+            max-height: clamp(1em, 7vw, 10em);
+
+            &__title h3 {
+                font-size: clamp(0.7em, 4vw, 1.2em);
+            }
+
+            &__tags > div {
+                font-size: clamp(0.6em, 3vw, 0.8em);
             }
         }
     }

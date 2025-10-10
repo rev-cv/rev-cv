@@ -1,4 +1,5 @@
 ---
+import SVGSendEmail from "../assets/send-email.svg";
 import SVGMail from "../assets/email.svg";
 import SVGGitHub from "../assets/github.svg";
 import SVGTelegram from "../assets/telegram.svg";
@@ -52,9 +53,24 @@ const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
     <div class="contacts__appeal">
         Рассматриваю предложения о сотрудничестве и полной занятости.
     </div>
+
+    <button class="contacts__form-button" onclick="toogleForm()"
+        ><SVGSendEmail /> Заполнить форму</button
+    >
+
+    <div class="contacts__form">
+        <div>
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSfXzWjJXsU9xZRmkAusViZUjVm-1_pNk5CwODCxtenVru1Ovw/viewform?embedded=true"
+                marginwidth="0">Загрузка…</iframe
+            >
+        </div>
+    </div>
 </div>
 
 <style lang="scss">
+    @use "../styles/h2-title" as *;
+
     .contacts {
         padding-bottom: clamp(3em, 10vw, 5em);
 
@@ -63,11 +79,8 @@ const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
         gap: 2em;
 
         &__title {
-            font-size: 1.8em;
-            // padding-bottom: 1em;
-            color: var(--color-basic-white);
-            font-weight: 700;
-            gap: 0.5em;
+            @include title-h2;
+            padding-bottom: 0em;
         }
 
         &__appeal {
@@ -84,7 +97,8 @@ const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
             gap: 1em;
         }
 
-        &__item {
+        &__item,
+        &__form-button {
             padding: 0.5em 1.15em 0.5em 1em;
             border-radius: 6px;
             background-color: var(--color-bg);
@@ -132,5 +146,45 @@ const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
                 height: 1.2em;
             }
         }
+
+        &__form-button {
+            color: var(--color-basic-white);
+            background-color: var(--color-button-bg);
+            cursor: pointer;
+            align-self: center;
+        }
+
+        &__form {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 300ms ease-in-out;
+
+            > div {
+                overflow: hidden;
+                display: flex;
+            }
+
+            &.show {
+                grid-template-rows: 1fr;
+            }
+        }
+
+        iframe {
+            height: 30em;
+            border: none;
+            outline: none;
+            flex-grow: 1;
+        }
     }
 </style>
+
+<script is:inline>
+    function toogleForm() {
+        const form = document.querySelector(".contacts__form");
+        if (form?.classList.contains("show")) {
+            form.classList.remove("show");
+        } else {
+            form?.classList.add("show");
+        }
+    }
+</script>

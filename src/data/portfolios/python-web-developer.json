@@ -1,8 +1,23 @@
 {
     "jobtitle": "Python Web Developer",
     "description": "Создаю надёжные и масштабируемые бэкенд-системы для веб-приложений. Специализируюсь на фреймворках Django и FastAPI, проектирую и оптимизирую базы данных, а также разрабатываю API для эффективного взаимодействия между клиентом и сервером.",
-    "url": "python-web-developer",
+    "url": "python-dev",
     "cases": ["web-app-cash-flow"],
+    "cover": "seo/python-web-developer.webp",
+    "keywords": [
+        "frontend developer",
+        "front-end",
+        "portfolio",
+        "web development",
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "revin roman",
+        "junior developer",
+        "middle developer",
+        "projects"
+    ],
     "skills": [
         {
             "name": "Python",

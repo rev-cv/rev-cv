@@ -449,6 +449,22 @@ for (const path in portfoliosJSON) {
             }
         }
     }
+
+    @media (max-width: 530px) {
+        .hero-banner {
+            &__btns {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1em;
+
+                button {
+                    display: flex;
+                    flex-wrap: nowrap;
+                }
+            }
+        }
+    }
 </style>
 
 <script>

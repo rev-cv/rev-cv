@@ -31,21 +31,17 @@ const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
 </div>
 
 <style lang="scss">
+    @use "../styles/h2-title" as *;
+
     .my-item {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        // grid-auto-flow: column;
         gap: 1em;
-        // padding-top: clamp(3em, 10vw, 5em);
         padding-bottom: clamp(3em, 10vw, 5em);
 
         &__card-head {
             grid-column: 1 / -1;
-            font-size: 1.8em;
-            padding-bottom: 1em;
-            color: var(--color-basic-white);
-            font-weight: 700;
-            gap: 0.5em;
+            @include title-h2;
         }
 
         &__card {
@@ -54,21 +50,20 @@ const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
             border-radius: 0.5em;
 
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: start;
 
             &-title {
                 font-size: 1em;
                 white-space: nowrap;
                 color: var(--color-basic-white);
                 font-weight: 700;
-                // order: 0;
             }
 
             &-level {
                 font-size: 0.9em;
                 color: var(--color-basic-white);
                 font-weight: 600;
-                // order: 2;
             }
 
             &-descr {
@@ -76,21 +71,27 @@ const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
                 // text-wrap: balance;
                 color: var(--color-basic-white);
                 flex-basis: 100%;
-                // order: 3;
             }
         }
     }
 
-    // .my-item.skills {
-    //     .my-item__card::after {
-    //         content: "";
-    //         flex-grow: 1;
-    //         border-bottom: 1px dotted var(--color-basic-white);
-    //         margin: 0 10px;
-    //         height: 1px;
-    //         order: 1;
-    //         align-self: center;
-    //         opacity: 0.3;
-    //     }
-    // }
+    @media (max-width: 533px) {
+        .my-item {
+            grid-template-columns: 1fr;
+            gap: 0.4em;
+
+            &__card {
+                padding: 1em;
+                font-size: clamp(0.6em, 4vw, 1em);
+                align-items: center;
+                gap: 0.3em;
+
+                &-title,
+                &-level,
+                &-descr {
+                    text-align: center;
+                }
+            }
+        }
+    }
 </style>

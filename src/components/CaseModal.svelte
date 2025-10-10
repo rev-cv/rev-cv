@@ -231,7 +231,7 @@
         </div>
     </div>
 
-    <button class="close" onclick={closeModal}><SVGClose /></button>
+    <button class="btn-close" onclick={closeModal}><SVGClose /></button>
 </div>
 
 <style lang="scss">
@@ -248,6 +248,7 @@
             backdrop-filter 600ms ease-in-out,
             background-color 600ms ease-in-out;
         cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
 
         .modal {
             isolation: isolate;
@@ -269,14 +270,16 @@
                 opacity 300ms ease-in-out,
                 width 300ms ease-in-out,
                 height 300ms ease-in-out,
+                grid-template-columns 200ms ease-in-out,
+                gap 200ms ease-in-out,
                 transform 300ms ease-in-out;
 
             overflow: hidden;
 
             display: grid;
-            grid-template-columns: 1fr 1.6fr;
+            grid-template-columns: 1fr 0fr;
             padding: $padding_in_item 0 $padding_in_item $padding_in_item;
-            gap: $padding_in_item * 2;
+            gap: 0;
 
             .left-scroll {
                 border-top-left-radius: $border_radius - $padding_in_item;
@@ -424,6 +427,10 @@
                             opacity: 1;
                         }
                     }
+
+                    &:last-child {
+                        padding: 2em;
+                    }
                 }
 
                 :global(:is(a)) {
@@ -494,7 +501,7 @@
             }
         }
 
-        .close {
+        .btn-close {
             position: absolute;
             top: 1em;
             right: 1em;
@@ -534,7 +541,12 @@
                     opacity 100ms ease-in-out,
                     width 300ms ease-in-out 300ms,
                     height 300ms ease-in-out 300ms,
+                    grid-template-columns 300ms ease-in-out 300ms,
+                    gap 300ms ease-in-out 200ms,
                     transform 300ms ease-in-out;
+
+                gap: $padding_in_item * 2;
+                grid-template-columns: 1fr 1.6fr;
 
                 .right-scroll {
                     > * {
@@ -544,13 +556,13 @@
 
                     @for $i from 1 through 5 {
                         > *:nth-child(#{$i}) {
-                            transition-delay: #{300 + ($i - 1) * 100}ms;
+                            transition-delay: #{300 + ($i - 1) * 200}ms;
                         }
                     }
                 }
             }
 
-            .close {
+            .btn-close {
                 opacity: 1;
                 scale: 1;
                 transition:
@@ -565,7 +577,7 @@
             background-color: var(--color-black) !important;
             backdrop-filter: blur(0px);
 
-            .close {
+            .btn-close {
                 top: initial;
                 bottom: 7em;
                 right: 1em;
@@ -582,11 +594,15 @@
                 .left-scroll,
                 .right-scroll {
                     overflow-x: hidden;
-                    overflow-y: visible !important;
+                    overflow-y: visible;
                     padding-right: $padding_in_item;
                     align-self: start;
                     border-top-left-radius: 0 !important;
                     border-bottom-left-radius: 0 !important;
+                }
+
+                .right-scroll {
+                    overflow-y: hidden;
                 }
 
                 video,

@@ -1,8 +1,23 @@
 {
     "jobtitle": "Python Software Engineer",
     "description": "Разрабатываю многофункциональные приложения на Python. Мой опыт включает создание десктопных приложений с помощью PyQt, автоматизацию рутинных задач, парсинг данных и разработку Telegram-ботов.",
-    "url": "python-software-engineer",
+    "url": "python-engineer",
     "cases": [],
+    "cover": "seo/python-software-engineer.webp",
+    "keywords": [
+        "frontend developer",
+        "front-end",
+        "portfolio",
+        "web development",
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "revin roman",
+        "junior developer",
+        "middle developer",
+        "projects"
+    ],
     "skills": [
         {
             "name": "Python Language",

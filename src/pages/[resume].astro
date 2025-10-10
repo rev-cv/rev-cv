@@ -7,7 +7,6 @@ import SkillsAndTools from "../components/SkillsAndTools.astro";
 import Education from "../components/Education.astro";
 import Roadmap from "../components/Roadmap.astro";
 import Contacts from "../components/Contacts.astro";
-
 import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
 // ↓ статические пути для всех доступных резюме
@@ -72,7 +71,12 @@ const cases = allCases
     });
 ---
 
-<Layout title={`${currentResume.jobtitle} - Ревин Роман`}>
+<Layout
+    title={`${currentResume.jobtitle} - Ревин Роман`}
+    description={currentResume.description}
+    cover={currentResume.cover}
+    keywords={currentResume.keywords}
+>
     <HeroBanner resume={currentResume} />
     <AboutMe cards={currentResume.aboutme} />
     <Cases cases={cases} />

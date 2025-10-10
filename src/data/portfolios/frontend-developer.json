@@ -1,8 +1,23 @@
 {
     "jobtitle": "Frontend Developer",
     "description": "Создаю современные и функциональные веб-интерфейсы с фокусом на пользовательский опыт. Специализируюсь на HTML, CSS, JavaScript и современных технологиях фронтенда, создавая чистый, адаптивный и производительный код.",
-    "url": "frontend-developer",
+    "url": "frontend-dev",
     "cases": ["ui-go-surf", "ui-chess", "web-app-cash-flow"],
+    "cover": "seo/frontend-developer.webp",
+    "keywords": [
+        "frontend developer",
+        "front-end",
+        "portfolio",
+        "web development",
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "revin roman",
+        "junior developer",
+        "middle developer",
+        "projects"
+    ],
     "skills": [
         {
             "name": "HTML5",

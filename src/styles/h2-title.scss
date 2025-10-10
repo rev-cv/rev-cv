@@ -1,0 +1,30 @@
+@mixin title-h2 {
+    font-size: clamp(1em, 8vw, 1.8em);
+    padding-bottom: 1em;
+    color: var(--color-basic-white);
+    font-weight: 700;
+    gap: 0.5em;
+
+    background: linear-gradient(
+        90deg,
+        var(--color-basic-white),
+        var(--color-azure),
+        var(--color-basic-white),
+        var(--color-azure),
+        var(--color-basic-white)
+    );
+    background-size: 400% 100%;
+
+    color: transparent;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    animation: gradient-shift 10s ease infinite alternate;
+
+    @media (max-width: 533px) {
+        padding-left: 1em;
+        padding-right: 1em;
+        text-align: center;
+    }
+}

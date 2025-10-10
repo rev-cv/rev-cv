@@ -20,22 +20,16 @@ import education from "../data/education.json";
 </div>
 
 <style lang="scss">
+    @use "../styles/h2-title" as *;
+
     .education {
         display: flex;
         flex-direction: column;
         gap: 1em;
         padding-bottom: clamp(3em, 10vw, 5em);
 
-        * {
-            color: var(--color-basic-white);
-        }
-
         &__title {
-            font-size: 1.8em;
-            padding-bottom: 1em;
-            color: var(--color-basic-white);
-            font-weight: 700;
-            gap: 0.5em;
+            @include title-h2;
         }
 
         &__item {

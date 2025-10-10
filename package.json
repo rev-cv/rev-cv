@@ -12,6 +12,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/svelte": "^7.2.0",
     "astro": "^5.13.7",
+    "astro-seo-meta": "^5.2.0",
     "svelte": "^5.39.7",
     "typescript": "^5.9.3"
   },

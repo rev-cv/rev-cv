@@ -9,7 +9,7 @@ const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
     "../data/portfolios/*.json",
     {
         eager: true,
-    },
+    }
 );
 
 /**
@@ -57,7 +57,7 @@ for (const path in portfoliosJSON) {
                                     <h4>{portfolio.jobtitle}</h4>
                                     <p>{portfolio.description}</p>
                                     <a
-                                        href={`/${portfolio.url}`}
+                                        href={`${import.meta.env.BASE_URL}${portfolio.url}`}
                                         class="skill-link"
                                     >
                                         Подробнее →

@@ -1,9 +1,4 @@
 {
-    "github": {
-        "title": "GitHub",
-        "contact": "https://github.com/rev-cv",
-        "icon": "/src/assets/github.svg"
-    },
     "telegram": {
         "title": "Telegram",
         "contact": "https://t.me/rev-cv",
@@ -13,5 +8,10 @@
         "title": "Email",
         "contact": "mailto:your.email@example.com",
         "icon": "/src/assets/email.svg"
+    },
+    "github": {
+        "title": "GitHub",
+        "contact": "https://github.com/rev-cv",
+        "icon": "/src/assets/github.svg"
     }
 }

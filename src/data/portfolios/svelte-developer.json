@@ -1,9 +1,9 @@
 {
-    "jobtitle": "React Developer",
+    "jobtitle": "Svelte Developer",
     "description": "Создаю современные и функциональные веб-приложения с фокусом на пользовательский опыт. Специализируюсь на React, TypeScript и современных технологиях фронтенда.",
-    "url": "react-dev",
+    "url": "svelte-dev",
     "cases": [],
-    "cover": "seo/frontend-developer.webp",
+    "cover": "seo/svelte-developer.webp",
     "keywords": [
         "frontend developer",
         "front-end",
