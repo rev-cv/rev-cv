@@ -1,10 +1,15 @@
 <script>
     import CaseModal from "./CaseModal.svelte";
 
-    let isModalOpen = $state(false); // вместо true принимает rectungle
+    let isModalOpen = $state(false);
     let { metadata, content } = $props();
 
     let cardNode;
+
+    // Функция для определения типа файла
+    function isVideo(url) {
+        return url && url.toLowerCase().endsWith(".mp4");
+    }
 
     function scrollLock(isLock) {
         if (isLock) {
@@ -27,7 +32,6 @@
 <button
     class="case-item"
     onclick={() => {
-        // isModalOpen = true;
         isModalOpen = cardNode.getBoundingClientRect();
     }}
     bind:this={cardNode}
@@ -38,15 +42,24 @@
     </div>
 
     <div class="case-item__preview">
-        <video
-            src={`${import.meta.env.BASE_URL}${metadata.video}`}
-            preload="metadata"
-            autoplay="autoplay"
-            playsinline="playsinline"
-            loop="loop"
-            muted="muted"
-            data-fetchpriority="low"
-        ></video>
+        {#if metadata.cover}
+            {#if isVideo(metadata.cover)}
+                <video
+                    src={`${import.meta.env.BASE_URL}${metadata.cover}`}
+                    preload="metadata"
+                    autoplay="autoplay"
+                    playsinline="playsinline"
+                    loop="loop"
+                    muted="muted"
+                    data-fetchpriority="low"
+                ></video>
+            {:else}
+                <img
+                    src={`${import.meta.env.BASE_URL}${metadata.cover}`}
+                    alt={metadata.title}
+                />
+            {/if}
+        {/if}
     </div>
 
     <div class="case-item__tags">
@@ -127,9 +140,9 @@
             flex-grow: 1;
             border-radius: calc($border_radius - $padding_in_item);
             overflow: hidden;
-            box-shadow: inset 0 0 0 5px #000;
 
-            video {
+            video,
+            img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;

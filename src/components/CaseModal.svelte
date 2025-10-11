@@ -9,7 +9,6 @@
 
     let modalElement;
 
-    // сохраняем начальный стиль один раз
     const initialStyle = `
         --transform: translate(${rect.left}px, ${rect.top}px);
         --width: ${Math.round(rect.width)}px; 
@@ -17,11 +16,26 @@
     `;
 
     let isOpenMedia = $state(false);
-
     let style = $state(initialStyle);
 
+    // Функция для определения типа файла
+    function isVideo(url) {
+        return url && url.toLowerCase().endsWith(".mp4");
+    }
+
+    // Объединяем все медиафайлы в один массив
+    const allMedia = $derived(() => {
+        const media = [];
+        if (metadata.cover) {
+            media.push(metadata.cover);
+        }
+        if (metadata.media && Array.isArray(metadata.media)) {
+            media.push(...metadata.media);
+        }
+        return media;
+    });
+
     function updateStyleForScreenSize() {
-        // Обновляем стиль только если модальное окно полностью открыто,
         const rectMobile = `
             --transform: translate(calc(50vw - 50%), calc(50vh - 50%)); 
             --width: 100%;
@@ -54,7 +68,6 @@
     });
 
     function closeModal() {
-        // старт анимации закрытия модального окна
         style = initialStyle;
         isModalView = false;
     }
@@ -66,7 +79,6 @@
     }
 
     function handleTransitionEnd(e) {
-        // удаление модального окна из DOM
         if (e.propertyName === "transform" && !isModalView) {
             unmounte();
         }
@@ -76,56 +88,90 @@
         if (window.innerWidth < 1144) return;
 
         const button = e.currentTarget;
-        const media = button.querySelector(".video-wrapper, img");
+        const videoWrapper = button.querySelector(".video-wrapper");
+        const img = button.querySelector("img");
 
-        const previewRect = button.getBoundingClientRect();
-        button._previewRect = previewRect;
-
-        const modalRect = modalElement.getBoundingClientRect();
-        const relativeTop = previewRect.top - modalRect.top;
-        const relativeLeft = previewRect.left - modalRect.left;
+        const isVideoElement = videoWrapper !== null;
+        const animatedElement = isVideoElement ? videoWrapper : img;
 
         if (!isOpenMedia) {
-            button.style.minHeight = `${previewRect.height}px`;
+            const mediaRect = animatedElement.getBoundingClientRect();
+            button._mediaRect = mediaRect;
+            button._isVideo = isVideoElement;
 
-            media.style.position = "absolute";
-            media.style.top = `${relativeTop}px`;
-            media.style.left = `${relativeLeft}px`;
-            media.style.width = `${previewRect.width}px`;
-            media.style.height = `${previewRect.height}px`;
-            media.style.zIndex = "103";
-            media.style.transition = "all 200ms ease-in-out";
+            const modalRect = modalElement.getBoundingClientRect();
+            const relativeTop = mediaRect.top - modalRect.top;
+            const relativeLeft = mediaRect.left - modalRect.left;
+
+            button.style.minHeight = `${button.offsetHeight}px`;
+
+            animatedElement.style.position = "absolute";
+            animatedElement.style.top = `${relativeTop}px`;
+            animatedElement.style.left = `${relativeLeft}px`;
+            animatedElement.style.width = `${mediaRect.width}px`;
+            animatedElement.style.height = `${mediaRect.height}px`;
+            animatedElement.style.zIndex = "103";
+            animatedElement.style.transition = "all 200ms ease-in-out";
+
+            if (isVideoElement) {
+                const video = button.querySelector("video");
+                if (video) {
+                    video.style.objectFit = "contain";
+                    video.style.width = "100%";
+                    video.style.height = "100%";
+                }
+            } else {
+                animatedElement.style.objectFit = "contain";
+                animatedElement.style.borderRadius = "1.4rem";
+            }
 
             requestAnimationFrame(() => {
-                // media.style.transform = "scale(1.01)";
-                media.style.top = "0px";
-                media.style.left = "0px";
-                media.style.width = "100%";
-                media.style.height = "100%";
+                animatedElement.style.top = "0px";
+                animatedElement.style.left = "0px";
+                animatedElement.style.width = "100%";
+                animatedElement.style.height = "100%";
+                if (!isVideoElement) {
+                    animatedElement.style.borderRadius = "0";
+                }
             });
 
             setTimeout(() => {
-                media.style.backgroundColor = "var(--color-black)";
+                animatedElement.style.backgroundColor = "var(--color-black)";
                 isOpenMedia = true;
             }, 400);
         } else {
-            const previewRect = button._previewRect;
+            const mediaRect = button._mediaRect;
+            const isVideoElement = button._isVideo;
 
-            if (!previewRect) return;
+            if (!mediaRect) return;
 
-            media.style.transition = "all 200ms ease-in-out";
+            const animatedElement = isVideoElement ? videoWrapper : img;
 
-            media.style.top = `${relativeTop}px`;
-            media.style.left = `${relativeLeft}px`;
-            media.style.width = `${previewRect.width}px`;
-            media.style.height = `${previewRect.height}px`;
-            media.style.backgroundColor = "";
+            const modalRect = modalElement.getBoundingClientRect();
+            const relativeTop = mediaRect.top - modalRect.top;
+            const relativeLeft = mediaRect.left - modalRect.left;
+
+            animatedElement.style.transition = "all 200ms ease-in-out";
+            if (!isVideoElement) {
+                animatedElement.style.borderRadius = "1.4rem";
+            }
+
+            animatedElement.style.top = `${relativeTop}px`;
+            animatedElement.style.left = `${relativeLeft}px`;
+            animatedElement.style.width = `${mediaRect.width}px`;
+            animatedElement.style.height = `${mediaRect.height}px`;
+            animatedElement.style.backgroundColor = "";
 
             setTimeout(() => {
-                media.style.cssText = "";
-                e.target.style.minHeight = "";
+                animatedElement.style.cssText = "";
+                if (isVideoElement) {
+                    const video = button.querySelector("video");
+                    if (video) {
+                        video.style.objectFit = "";
+                    }
+                }
+                button.style.minHeight = "";
                 isOpenMedia = false;
-                button.style.minHeight = ``;
             }, 200);
         }
     }
@@ -153,33 +199,32 @@
         aria-modal="true"
     >
         <div class="left-scroll">
-            <button
-                onclick={previewMedia}
-                title="100%"
-                tabindex={isOpenMedia ? -1 : 0}
-            >
-                <div class="video-wrapper">
-                    <video
-                        src={`${import.meta.env.BASE_URL}${metadata.video}`}
-                        preload="metadata"
-                        autoplay="autoplay"
-                        playsinline="playsinline"
-                        loop="loop"
-                        muted="muted"
-                        data-fetchpriority="low"
-                    ></video>
-                </div>
-            </button>
-
-            {#each metadata.pictures as pic}
+            {#each allMedia() as media}
                 <button
                     onclick={previewMedia}
                     title="100%"
                     tabindex={isOpenMedia ? -1 : 0}
                 >
-                    <picture>
-                        <img src={`${import.meta.env.BASE_URL}${pic}`} alt="" />
-                    </picture>
+                    {#if isVideo(media)}
+                        <div class="video-wrapper">
+                            <video
+                                src={`${import.meta.env.BASE_URL}${media}`}
+                                preload="auto"
+                                autoplay="autoplay"
+                                playsinline="playsinline"
+                                loop="loop"
+                                muted="muted"
+                                data-fetchpriority="low"
+                            ></video>
+                        </div>
+                    {:else}
+                        <picture>
+                            <img
+                                src={`${import.meta.env.BASE_URL}${media}`}
+                                alt=""
+                            />
+                        </picture>
+                    {/if}
                 </button>
             {/each}
         </div>
@@ -487,16 +532,44 @@
                     font-size: 0.9em;
                 }
 
+                :global(li) {
+                    display: inline-block;
+                    flex-wrap: wrap;
+
+                    &:last-child {
+                        padding-bottom: 0;
+                    }
+
+                    &:first-child {
+                        padding-top: 0;
+
+                        &::before {
+                            top: 0.6em !important;
+                        }
+                    }
+                }
+
                 :global(:is(p, ul)) {
                     padding: 1em 0 0.1em 0;
                 }
 
-                :global(ul li:first-child) {
+                :global(hr) {
                     padding-top: 0;
+                    margin: 1em 0 0.1em 0;
+                    height: 1px;
+                    width: 90%;
+                    justify-self: center;
+                    opacity: 0.2;
                 }
 
-                :global(ul li:last-child) {
-                    padding-bottom: 0;
+                :global(code) {
+                    color: var(--color-code);
+                    background-color: var(--color-code-bg);
+                    padding: 0.2em 0.4em;
+                    // margin: -0.2em;
+                    line-height: 1em;
+                    font-size: 0.9em;
+                    border-radius: 2px;
                 }
             }
         }

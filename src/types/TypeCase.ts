@@ -2,8 +2,8 @@ export interface TypeCase {
     title: string;
     url: string;
     tech: string[];
-    video: string;
-    pictures: string[];
+    cover: string;
+    media: string[];
     code_url: string;
     demo_url: string;
     descr: string;

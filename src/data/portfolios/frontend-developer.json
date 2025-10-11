@@ -2,7 +2,14 @@
     "jobtitle": "Frontend Developer",
     "description": "Создаю современные и функциональные веб-интерфейсы с фокусом на пользовательский опыт. Специализируюсь на HTML, CSS, JavaScript и современных технологиях фронтенда, создавая чистый, адаптивный и производительный код.",
     "url": "frontend-dev",
-    "cases": ["ui-go-surf", "ui-chess", "web-app-cash-flow"],
+    "cases": [
+        "ui-go-surf",
+        "ui-chess",
+        "chrome-ext-tabex",
+        "web-app-cash-flow",
+        "web-app-kanban",
+        "ui-ural-invest"
+    ],
     "cover": "seo/frontend-developer.webp",
     "keywords": [
         "frontend developer",
@@ -218,12 +225,12 @@
             "description": "Серверный JavaScript"
         },
         {
-            "name": "Node Version Switcher (n)",
-            "description": "Быстрое переключение версий Node.js для разных проектов"
+            "name": "N",
+            "description": "Node Version Switcher (n) - быстрое переключение версий Node.js для разных проектов"
         },
         {
-            "name": "Node Package Manager (npm)",
-            "description": "Управление зависимостями и пакетами JavaScript"
+            "name": "NPM",
+            "description": "Node Package Manager (npm) - управление зависимостями и пакетами JavaScript"
         },
         {
             "name": "ESLint + Prettier",
@@ -274,7 +281,7 @@
             "description": "Модульный сборщик для оптимизации веб-приложений"
         },
         {
-            "name": "AI-Powered Development",
+            "name": "AI",
             "description": "ChatGPT, GitHub Copilot, Claude - для автоматизации рутины, код-ревью, генерации тестов"
         }
     ],

@@ -13,7 +13,7 @@ const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
 
 // массив всех доступных портфолио
 const allPortfolios: PortfolioItem[] = [];
-for (const path in portfoliosJSON) {
+for (const path of Object.keys(portfoliosJSON)) {
     const portfolio = portfoliosJSON[path].default;
     allPortfolios.push(portfolio);
 }

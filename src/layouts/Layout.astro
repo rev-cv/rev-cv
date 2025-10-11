@@ -7,8 +7,8 @@ import { Seo } from "astro-seo-meta";
 
 export interface Props {
     title: string;
-    description: string;
-    cover: string;
+    description?: string;
+    cover?: string;
     keywords?: string[];
 }
 
@@ -39,14 +39,14 @@ const { title, description, cover, keywords } = Astro.props;
         />
         <Seo
             title={title}
-            description={description}
-            keywords={keywords}
+            description={description && ""}
+            keywords={keywords && []}
             facebook={{
-                image: `${import.meta.env.BASE_URL}${cover}`,
+                image: cover ? `${import.meta.env.BASE_URL}${cover}` : "",
                 type: "website",
             }}
             twitter={{
-                image: `${import.meta.env.BASE_URL}${cover}`,
+                image: cover ? `${import.meta.env.BASE_URL}${cover}` : "",
                 card: "summary",
             }}
         />

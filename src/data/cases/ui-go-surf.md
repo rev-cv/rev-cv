@@ -4,10 +4,10 @@ descr: "Лендинг по макету, сверстанный на чисто
 url: "ui-go-surf"
 tech:
     - "No Frameworks"
-    - "Vanilla JS"
+    - "JS"
     - "SCSS"
-video: "vid/2025-09-08 10-09-54.mp4"
-pictures:
+cover: "vid/2025-09-08 10-09-54.mp4"
+media:
 code_url: "https://github.com/rev-cv/test-west"
 demo_url: "https://rev-cv.github.io/test-west/"
 macket_url: "https://www.figma.com/design/Dh3oxsX5naFOuXj2f7a6gy"

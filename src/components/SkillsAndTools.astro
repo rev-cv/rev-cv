@@ -2,28 +2,18 @@
 import type { MySkills } from "../types/TypeSkills";
 import ProgressLevel from "./ProgressLevel.astro";
 const { items, title, isSkills = false } = Astro.props;
-
 const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
-
-// console.log(s_items);
 ---
 
 <div class={`my-item container${isSkills ? " skills" : " tools"}`}>
     <h2 class="my-item__card-head">{title}</h2>
     {
         s_items.map((item: MySkills) => {
-            // @ts-ignore
-            // const Icon = svgs[card.id] ? svgs[card.id] : SVGCrossBrowser;
             return (
                 <div class="my-item__card">
                     <div class="my-item__card-title">{item.name}</div>
-
                     <div class="my-item__card-descr">{item.description}</div>
-
-                    {isSkills && (
-                        // <div class="my-item__card-level">{`${item.level}%`}</div>
-                        <ProgressLevel level={item.level} />
-                    )}
+                    {isSkills && <ProgressLevel level={item.level} />}
                 </div>
             );
         })
@@ -35,7 +25,7 @@ const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
 
     .my-item {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1em;
         padding-bottom: clamp(3em, 10vw, 5em);
 
@@ -46,7 +36,7 @@ const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
 
         &__card {
             background-color: var(--color-black);
-            padding: 2em 1.2em;
+            padding: 1em 1.2em;
             border-radius: 0.5em;
 
             display: flex;
