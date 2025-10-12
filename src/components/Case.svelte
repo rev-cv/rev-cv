@@ -46,7 +46,7 @@
             {#if isVideo(metadata.cover)}
                 <video
                     src={`${import.meta.env.BASE_URL}${metadata.cover}`}
-                    preload="metadata"
+                    preload="auto"
                     autoplay="autoplay"
                     playsinline="playsinline"
                     loop="loop"
@@ -156,7 +156,7 @@
             max-width: calc(100% - 2em - 2em);
 
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap-reverse;
             gap: 0.5em;
 
             > div {
