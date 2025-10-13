@@ -8,8 +8,9 @@ tech:
     - "ORM"
     - "Svelte"
     - "SCSS"
-cover: "vid/2025-09-30 06-54-45.mp4"
+cover: "pic/cash-flower.webp"
 media:
+    - "vid/web-app-cash-flow.mp4"
 code_url: "https://github.com/rev-cv/test-cash-flow"
 demo_url: ""
 macket_url: ""

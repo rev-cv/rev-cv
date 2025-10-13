@@ -8,8 +8,7 @@ tech:
     - "SCSS"
 cover: "pic/test-invest-cover.webp"
 media:
-    - "01k5p06a9fewgv0e2f4y48yh7j_1758453799_img_0.webp"
-    - "vid/2025-09-11 14-36-31.mp4"
+    - "vid/ui-invest.mp4"
 code_url: "https://github.com/rev-cv/test-invest"
 demo_url: "https://f07189fd.test-invest.pages.dev/"
 macket_url: "https://www.figma.com/design/BQY5lOjSpH7pCxBOgJgpUa"

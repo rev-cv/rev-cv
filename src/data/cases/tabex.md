@@ -10,6 +10,7 @@ tech:
     - "Dexie.js"
 cover: "vid/tabex-cover.mp4"
 media:
+    - "vid/tabex.mp4"
 code_url: "https://github.com/rev-cv/tab-extension"
 demo_url: ""
 macket_url: ""

@@ -1,12 +1,12 @@
 {
     "telegram": {
         "title": "Telegram",
-        "contact": "https://t.me/rev-cv",
+        "contact": "https://t.me/romallanium",
         "icon": "/src/assets/telegram.svg"
     },
     "email": {
         "title": "Email",
-        "contact": "mailto:your.email@example.com",
+        "contact": "mailto:r3v.rom@yandex.ru",
         "icon": "/src/assets/email.svg"
     },
     "github": {

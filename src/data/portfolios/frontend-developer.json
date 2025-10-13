@@ -3,12 +3,14 @@
     "description": "Создаю современные и функциональные веб-интерфейсы с фокусом на пользовательский опыт. Специализируюсь на HTML, CSS, JavaScript и современных технологиях фронтенда, создавая чистый, адаптивный и производительный код.",
     "url": "frontend-dev",
     "cases": [
+        "web-app-ptm",
+        "web-portfolio",
         "ui-go-surf",
         "ui-chess",
         "chrome-ext-tabex",
-        "web-app-cash-flow",
+        "ui-ural-invest",
         "web-app-kanban",
-        "ui-ural-invest"
+        "web-app-cash-flow"
     ],
     "cover": "seo/frontend-developer.webp",
     "keywords": [
@@ -251,6 +253,10 @@
         {
             "name": "ImageMagick",
             "description": "Автоматизация обработки изображений: ресайз, оптимизация, форматы"
+        },
+        {
+            "name": "HandBrake",
+            "description": "Конвертер видео с открытым исходным кодом, который позволяет сжимать и конвертировать видеофайлы"
         },
         {
             "name": "Iconify / SVGRepo",

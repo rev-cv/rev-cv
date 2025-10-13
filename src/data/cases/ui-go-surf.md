@@ -6,7 +6,7 @@ tech:
     - "No Frameworks"
     - "JS"
     - "SCSS"
-cover: "vid/2025-09-08 10-09-54.mp4"
+cover: "vid/ui-surf.mp4"
 media:
 code_url: "https://github.com/rev-cv/test-west"
 demo_url: "https://rev-cv.github.io/test-west/"
