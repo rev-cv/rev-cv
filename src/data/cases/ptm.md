@@ -15,12 +15,11 @@ tech:
     - "FastAPI"
     - "React"
     - "SCSS"
-cover: "vid/ptm2-cover.mp4"
+cover: "pic/ptm2-cover.webp"
 media:
     - "vid/ptm2-show-task-editor.mp4"
     - "vid/ptm2-show-create-task.mp4"
     - "vid/ptm2-filtration.mp4"
-    - "pic/ptm1.webp"
     - "vid/ptm0.mp4"
 code_url: "https://github.com/rev-cv/test-cash-flow"
 demo_url: ""

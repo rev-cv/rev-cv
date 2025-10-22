@@ -1,10 +1,11 @@
 {
     "jobtitle": "Frontend Developer",
-    "description": "Создаю современные и функциональные веб-интерфейсы с фокусом на пользовательский опыт. Специализируюсь на HTML, CSS, JavaScript и современных технологиях фронтенда, создавая чистый, адаптивный и производительный код.",
+    "description": "Решаю задачи бизнеса с помощью кода: создаю быстрые, адаптивные и удобные для пользователя веб-интерфейсы. Специализируюсь на современном frontend-стеке, обеспечивая высокое качество и производительность продукта.",
     "url": "frontend-dev",
     "cases": [
         "web-app-ptm",
         "web-portfolio",
+        "wp-simple-up",
         "ui-go-surf",
         "ui-chess",
         "chrome-ext-tabex",
@@ -121,7 +122,7 @@
         },
         {
             "name": "Accessibility",
-            "level": 1,
+            "level": 0,
             "description": "Доступность интерфейсов (a11y)"
         },
         {
@@ -166,27 +167,27 @@
         },
         {
             "name": "Jest",
-            "level": 1,
+            "level": 0,
             "description": "Unit-тестирование JavaScript кода"
         },
         {
             "name": "Three.js",
-            "level": 1,
+            "level": 0,
             "description": "3D графика в браузере"
         },
         {
             "name": "i18n",
-            "level": 1,
+            "level": 0,
             "description": "Интернационализация приложений"
         },
         {
             "name": "GraphQL",
-            "level": 1,
+            "level": 0,
             "description": "Язык запросов для API"
         },
         {
             "name": "PWA",
-            "level": 1,
+            "level": 0,
             "description": "Прогрессивные веб-приложения"
         },
         {
@@ -201,7 +202,7 @@
         },
         {
             "name": "WebAssembly",
-            "level": 1,
+            "level": 0,
             "description": "Высокопроизводительные вычисления"
         }
     ],

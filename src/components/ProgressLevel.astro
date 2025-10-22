@@ -64,6 +64,10 @@ const { level = 0 } = Astro.props;
             }
         }
 
+        &[data-level="0"] .progress__level::after {
+            background-color: var(--color-basic-white-80);
+        }
+
         &[data-level="1"] {
             .progress__level:nth-child(1) {
                 background-color: var(--color-azure);

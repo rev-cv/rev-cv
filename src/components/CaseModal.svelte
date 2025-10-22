@@ -16,14 +16,15 @@
     `;
 
     let isOpenMedia = $state(false);
+    let openMediaUrl = $state(null);
     let style = $state(initialStyle);
 
-    // Функция для определения типа файла
+    // определение типа файла
     function isVideo(url) {
         return url && url.toLowerCase().endsWith(".mp4");
     }
 
-    // Объединяем все медиафайлы в один массив
+    // все медиафайлы в один массив
     const allMedia = $derived(() => {
         const media = [];
         if (metadata.cover) {
@@ -84,7 +85,7 @@
         }
     }
 
-    function previewMedia(e) {
+    function previewMedia(e, mediaUrl) {
         if (window.innerWidth < 1144) return;
 
         const button = e.currentTarget;
@@ -125,6 +126,10 @@
                 animatedElement.style.borderRadius = "1.4rem";
             }
 
+            // принудительный reflow для Firefox,
+            // чтобы он успел обработать начальные стили.
+            void animatedElement.offsetHeight;
+
             requestAnimationFrame(() => {
                 animatedElement.style.top = "0px";
                 animatedElement.style.left = "0px";
@@ -138,6 +143,7 @@
             setTimeout(() => {
                 animatedElement.style.backgroundColor = "var(--color-black)";
                 isOpenMedia = true;
+                openMediaUrl = mediaUrl;
             }, 400);
         } else {
             const mediaRect = button._mediaRect;
@@ -172,6 +178,7 @@
                 }
                 button.style.minHeight = "";
                 isOpenMedia = false;
+                openMediaUrl = null;
             }, 200);
         }
     }
@@ -201,7 +208,7 @@
         <div class="left-scroll">
             {#each allMedia() as media}
                 <button
-                    onclick={previewMedia}
+                    onclick={(e) => previewMedia(e, media)}
                     title="100%"
                     tabindex={isOpenMedia ? -1 : 0}
                 >
@@ -209,13 +216,42 @@
                         <div class="video-wrapper">
                             <video
                                 src={`${import.meta.env.BASE_URL}${media}`}
-                                preload="auto"
-                                autoplay="autoplay"
-                                playsinline="playsinline"
-                                loop="loop"
-                                muted="muted"
+                                preload="metadata"
+                                playsinline
                                 data-fetchpriority="low"
+                                controls={openMediaUrl === media}
+                                muted={openMediaUrl !== media}
+                                autoplay={openMediaUrl !== media}
+                                loop={openMediaUrl !== media}
                             ></video>
+                            {#if openMediaUrl === media}
+                                <div
+                                    class="close-overlay"
+                                    role="button"
+                                    tabindex="0"
+                                    title="Закрыть видео"
+                                    onclick={(e) => {
+                                        e.stopPropagation();
+                                        const parentButton =
+                                            e.currentTarget.closest("button");
+                                        if (parentButton) {
+                                            previewMedia(
+                                                { currentTarget: parentButton },
+                                                media,
+                                            );
+                                        }
+                                    }}
+                                    onkeydown={(e) => {
+                                        if (
+                                            e.key === "Enter" ||
+                                            e.key === " "
+                                        ) {
+                                            e.preventDefault();
+                                            e.currentTarget.click();
+                                        }
+                                    }}
+                                ></div>
+                            {/if}
                         </div>
                     {:else}
                         <picture>
@@ -232,12 +268,20 @@
         <div class="right-scroll">
             <div class="case-nav">
                 {#if metadata.code_url}
-                    <a href={metadata.code_url} tabindex={isOpenMedia ? -1 : 0}>
+                    <a
+                        href={metadata.code_url}
+                        tabindex={isOpenMedia ? -1 : 0}
+                        target="_blank"
+                    >
                         <SVGCode /> <span>code</span>
                     </a>
                 {/if}
                 {#if metadata.demo_url}
-                    <a href={metadata.demo_url} tabindex={isOpenMedia ? -1 : 0}>
+                    <a
+                        href={metadata.demo_url}
+                        tabindex={isOpenMedia ? -1 : 0}
+                        target="_blank"
+                    >
                         <SVGDemo /> <span>demo</span>
                     </a>
                 {/if}
@@ -245,8 +289,10 @@
                     <a
                         href={metadata.macket_url}
                         tabindex={isOpenMedia ? -1 : 0}
-                        ><SVGFigma /> <span>layout</span></a
+                        target="_blank"
                     >
+                        <SVGFigma /> <span>layout</span>
+                    </a>
                 {/if}
             </div>
             <div class="title">{metadata.title}</div>
@@ -256,12 +302,20 @@
 
             <div class="case-nav">
                 {#if metadata.code_url}
-                    <a href={metadata.code_url} tabindex={isOpenMedia ? -1 : 0}>
+                    <a
+                        href={metadata.code_url}
+                        tabindex={isOpenMedia ? -1 : 0}
+                        target="_blank"
+                    >
                         <SVGCode /> <span>code</span>
                     </a>
                 {/if}
                 {#if metadata.demo_url}
-                    <a href={metadata.demo_url} tabindex={isOpenMedia ? -1 : 0}>
+                    <a
+                        href={metadata.demo_url}
+                        tabindex={isOpenMedia ? -1 : 0}
+                        target="_blank"
+                    >
                         <SVGDemo /> <span>demo</span>
                     </a>
                 {/if}
@@ -269,8 +323,10 @@
                     <a
                         href={metadata.macket_url}
                         tabindex={isOpenMedia ? -1 : 0}
-                        ><SVGFigma /> <span>layout</span></a
+                        target="_blank"
                     >
+                        <SVGFigma /> <span>layout</span>
+                    </a>
                 {/if}
             </div>
         </div>
@@ -345,6 +401,18 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    position: relative; /* Для позиционирования оверлея */
+
+                    .close-overlay {
+                        position: absolute;
+                        inset: 0;
+                        /* Оставляем 40px снизу для контролов */
+                        bottom: 40px;
+                        cursor: pointer;
+                        /* z-index, чтобы быть над видео, но под его контролами */
+                        z-index: 1;
+                        -webkit-tap-highlight-color: transparent;
+                    }
                 }
 
                 video,
