@@ -96,55 +96,63 @@
         const animatedElement = isVideoElement ? videoWrapper : img;
 
         if (!isOpenMedia) {
-            const mediaRect = animatedElement.getBoundingClientRect();
-            button._mediaRect = mediaRect;
-            button._isVideo = isVideoElement;
+            if (animatedElement instanceof HTMLElement) {
+                const mediaRect = animatedElement.getBoundingClientRect();
+                button._mediaRect = mediaRect;
+                button._isVideo = isVideoElement;
 
-            const modalRect = modalElement.getBoundingClientRect();
-            const relativeTop = mediaRect.top - modalRect.top;
-            const relativeLeft = mediaRect.left - modalRect.left;
+                if (modalElement instanceof HTMLElement) {
+                    const modalRect = modalElement.getBoundingClientRect();
+                    const relativeTop = mediaRect.top - modalRect.top;
+                    const relativeLeft = mediaRect.left - modalRect.left;
 
-            button.style.minHeight = `${button.offsetHeight}px`;
+                    if (button instanceof HTMLElement) {
+                        button.style.minHeight = `${button.offsetHeight}px`;
 
-            animatedElement.style.position = "absolute";
-            animatedElement.style.top = `${relativeTop}px`;
-            animatedElement.style.left = `${relativeLeft}px`;
-            animatedElement.style.width = `${mediaRect.width}px`;
-            animatedElement.style.height = `${mediaRect.height}px`;
-            animatedElement.style.zIndex = "103";
-            animatedElement.style.transition = "all 200ms ease-in-out";
+                        animatedElement.style.position = "absolute";
+                        animatedElement.style.top = `${relativeTop}px`;
+                        animatedElement.style.left = `${relativeLeft}px`;
+                        animatedElement.style.width = `${mediaRect.width}px`;
+                        animatedElement.style.height = `${mediaRect.height}px`;
+                        animatedElement.style.zIndex = "103";
+                        animatedElement.style.transition =
+                            "all 200ms ease-in-out";
 
-            if (isVideoElement) {
-                const video = button.querySelector("video");
-                if (video) {
-                    video.style.objectFit = "contain";
-                    video.style.width = "100%";
-                    video.style.height = "100%";
+                        if (isVideoElement) {
+                            const video = button.querySelector("video");
+                            if (video instanceof HTMLElement) {
+                                video.style.objectFit = "contain";
+                                video.style.width = "100%";
+                                video.style.height = "100%";
+                            }
+                        } else {
+                            animatedElement.style.objectFit = "contain";
+                            animatedElement.style.borderRadius = "1.4rem";
+                        }
+
+                        // принудительный reflow для Firefox,
+                        // чтобы он успел обработать начальные стили.
+                        void animatedElement.offsetHeight;
+
+                        requestAnimationFrame(() => {
+                            animatedElement.style.top = "0px";
+                            animatedElement.style.left = "0px";
+                            animatedElement.style.width = "100%";
+                            animatedElement.style.height = "100%";
+                            if (!isVideoElement) {
+                                animatedElement.style.borderRadius = "0";
+                            }
+                        });
+
+                        setTimeout(() => {
+                            animatedElement.style.backgroundColor =
+                                "var(--color-black)";
+                            isOpenMedia = true;
+                            openMediaUrl = mediaUrl;
+                        }, 400);
+                    }
                 }
-            } else {
-                animatedElement.style.objectFit = "contain";
-                animatedElement.style.borderRadius = "1.4rem";
             }
-
-            // принудительный reflow для Firefox,
-            // чтобы он успел обработать начальные стили.
-            void animatedElement.offsetHeight;
-
-            requestAnimationFrame(() => {
-                animatedElement.style.top = "0px";
-                animatedElement.style.left = "0px";
-                animatedElement.style.width = "100%";
-                animatedElement.style.height = "100%";
-                if (!isVideoElement) {
-                    animatedElement.style.borderRadius = "0";
-                }
-            });
-
-            setTimeout(() => {
-                animatedElement.style.backgroundColor = "var(--color-black)";
-                isOpenMedia = true;
-                openMediaUrl = mediaUrl;
-            }, 400);
         } else {
             const mediaRect = button._mediaRect;
             const isVideoElement = button._isVideo;
@@ -153,33 +161,40 @@
 
             const animatedElement = isVideoElement ? videoWrapper : img;
 
-            const modalRect = modalElement.getBoundingClientRect();
-            const relativeTop = mediaRect.top - modalRect.top;
-            const relativeLeft = mediaRect.left - modalRect.left;
+            if (
+                animatedElement instanceof HTMLElement &&
+                modalElement instanceof HTMLElement
+            ) {
+                const modalRect = modalElement.getBoundingClientRect();
+                const relativeTop = mediaRect.top - modalRect.top;
+                const relativeLeft = mediaRect.left - modalRect.left;
 
-            animatedElement.style.transition = "all 200ms ease-in-out";
-            if (!isVideoElement) {
-                animatedElement.style.borderRadius = "1.4rem";
-            }
-
-            animatedElement.style.top = `${relativeTop}px`;
-            animatedElement.style.left = `${relativeLeft}px`;
-            animatedElement.style.width = `${mediaRect.width}px`;
-            animatedElement.style.height = `${mediaRect.height}px`;
-            animatedElement.style.backgroundColor = "";
-
-            setTimeout(() => {
-                animatedElement.style.cssText = "";
-                if (isVideoElement) {
-                    const video = button.querySelector("video");
-                    if (video) {
-                        video.style.objectFit = "";
-                    }
+                animatedElement.style.transition = "all 200ms ease-in-out";
+                if (!isVideoElement) {
+                    animatedElement.style.borderRadius = "1.4rem";
                 }
-                button.style.minHeight = "";
-                isOpenMedia = false;
-                openMediaUrl = null;
-            }, 200);
+
+                animatedElement.style.top = `${relativeTop}px`;
+                animatedElement.style.left = `${relativeLeft}px`;
+                animatedElement.style.width = `${mediaRect.width}px`;
+                animatedElement.style.height = `${mediaRect.height}px`;
+                animatedElement.style.backgroundColor = "";
+
+                setTimeout(() => {
+                    animatedElement.style.cssText = "";
+                    if (isVideoElement) {
+                        const video = button.querySelector("video");
+                        if (video instanceof HTMLElement) {
+                            video.style.objectFit = "";
+                        }
+                    }
+                    if (button instanceof HTMLElement) {
+                        button.style.minHeight = "";
+                    }
+                    isOpenMedia = false;
+                    openMediaUrl = null;
+                }, 200);
+            }
         }
     }
 </script>

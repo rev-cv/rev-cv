@@ -390,6 +390,34 @@ for (const path in portfoliosJSON) {
                 }
             }
         }
+
+        &::after {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            background-color: var(--color-azure);
+            border-radius: 50%;
+            width: 30em;
+            height: 30em;
+            filter: blur(500px);
+            z-index: 1;
+        }
+
+        &::before {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: rgb(0, 0, 0);
+            // opacity: 0.3;
+            border-radius: 50%;
+            width: 30em;
+            height: 30em;
+            filter: blur(500px);
+            z-index: 2;
+        }
     }
 
     $offset-step: 2%;

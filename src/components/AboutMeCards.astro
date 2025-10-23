@@ -71,31 +71,35 @@ const svgs = {
 };
 ---
 
-<div class="about-me container">
-    <!-- <div class="about-me__card-head">Обо мне</div> -->
-    {
-        cards.map((card: AboutMe) => {
-            // @ts-ignore
-            const Icon = svgs[card.id] ? svgs[card.id] : SVGCrossBrowser;
-            return (
-                <div class="about-me__card">
-                    <Icon />
-                    <div class="about-me__card-title">{card.title}</div>
-                    <div class="about-me__card-descr">{card.descr}</div>
-                </div>
-            );
-        })
-    }
+<div class="about-me">
+    <div class="container">
+        {
+            cards.map((card: AboutMe) => {
+                // @ts-ignore
+                const Icon = svgs[card.id] ? svgs[card.id] : SVGCrossBrowser;
+                return (
+                    <div class="about-me__card">
+                        <Icon />
+                        <div class="about-me__card-title">{card.title}</div>
+                        <div class="about-me__card-descr">{card.descr}</div>
+                    </div>
+                );
+            })
+        }
+    </div>
 </div>
 
 <style lang="scss">
     .about-me {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 20px;
         padding-top: clamp(3em, 10vw, 5em);
         padding-bottom: clamp(3em, 10vw, 5em);
+
+        > .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
         &__card-head {
             flex: 1 1 100%;

@@ -32,7 +32,9 @@
 <button
     class="case-item"
     onclick={() => {
-        isModalOpen = cardNode.getBoundingClientRect();
+        if (cardNode instanceof HTMLElement) {
+            isModalOpen = cardNode.getBoundingClientRect();
+        }
     }}
     bind:this={cardNode}
     tabindex="-1"
@@ -86,7 +88,8 @@
 
     .case-item {
         background-color: var(--color-black);
-        min-height: 20em;
+        min-height: 38vh;
+        max-height: 38vh;
         border-radius: 2em;
         padding: $padding_in_item;
         position: relative;
@@ -173,17 +176,23 @@
         }
     }
 
-    @media (max-width: 600px) {
+    .case-item {
+        width: calc(1280px / 2 - 2em);
+        scroll-snap-align: start;
+    }
+
+    @media (max-width: 999px) {
         .case-item {
-            max-height: clamp(1em, 7vw, 10em);
+            width: calc(100vw - 2em);
+            min-height: 25em;
+            max-height: 25em;
+        }
+    }
 
-            &__title h3 {
-                font-size: clamp(0.7em, 4vw, 1.2em);
-            }
-
-            &__tags > div {
-                font-size: clamp(0.6em, 3vw, 0.8em);
-            }
+    @media (max-width: 533px) {
+        .case-item {
+            width: calc(100vw - 0.6em);
+            font-size: 0.7em;
         }
     }
 </style>
