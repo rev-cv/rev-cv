@@ -1,0 +1,208 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Contacts from "../components/Contacts.astro";
+import { loadAllPortfolios } from "../data/portfolios/_portfolios";
+const portfolios = loadAllPortfolios().sort((a, b) => {
+    return b.cases.length - a.cases.length;
+});
+---
+
+<Layout title={`Мои портфолио`} description={""} cover={""} keywords={[]}>
+    <div class="portfolio-all container">
+        <p>
+            Мне всегда было интересно, как устроены вещи — будь то интерфейс,
+            система, команда или целый продукт. Это любопытство и стремление
+            разбираться в сути сделали меня специалистом с многопрофильным
+            опытом. Мои портфолио отражают разные направления работы, но все они
+            связаны общей идеей — видеть проект целиком и понимать, как
+            отдельные элементы взаимодействуют между собой.
+        </p>
+
+        <p>
+            Такой подход — не про разрозненные навыки, а про способность
+            соединять точки. На стыке ролей рождаются сильные решения, где
+            дизайн не спорит с разработкой, а стратегия поддерживает реализацию.
+        </p>
+
+        <p>
+            Работая на пересечении дисциплин, я стремлюсь видеть не только
+            задачу, но и контекст, в котором она живёт. Многопрофильность для
+            меня — не компромисс, а осознанная стратегия. Она помогает быстро
+            адаптироваться, находить решения, которые не лежат на поверхности, и
+            обеспечивать целостность проекта от идеи до внедрения.
+        </p>
+
+        <div class="portfolio-all__list">
+            {
+                portfolios.map((p) => (
+                    <div class="portfolio-all__card">
+                        <a
+                            class="link"
+                            href={`${import.meta.env.BASE_URL}${p.url}`}
+                        />
+
+                        <div class="title">{p.jobtitle}</div>
+                        <div class="descr">{p.description}</div>
+                        <div class="count-cases">{p.cases.length} кейсов</div>
+                        <picture>
+                            <img
+                                src={`${import.meta.env.BASE_URL}${p.cover}`}
+                                alt={p.jobtitle}
+                            />
+                        </picture>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="portfolio-all__end">
+            «Каждое портфолио — это опыт, который двигает дальше.»
+        </div>
+
+        <Contacts />
+    </div>
+</Layout>
+
+<style lang="scss">
+    $border_radius: 2rem;
+    $padding_in_item: 0.6rem;
+
+    .portfolio-all {
+        display: flex;
+        flex-direction: column;
+
+        > p {
+            color: var(--color-basic-white-80);
+            align-self: center;
+            padding: 0.5em 0;
+
+            font-size: clamp(0.8em, 2vw, 1.2em);
+            font-weight: 200;
+            line-height: 1.4em;
+            font-style: italic;
+
+            @media (max-width: 533px) {
+                padding-right: 1em;
+                padding-left: 1em;
+            }
+        }
+
+        &__list {
+            padding: 2em 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+        }
+
+        &__card {
+            height: 16em;
+            display: grid;
+            grid-template-columns: minmax(17.5em, 1fr) 2fr;
+            grid-template-areas:
+                "cover title"
+                "cover descr"
+                "cover count";
+            gap: 1em 1.6em;
+            background-color: var(--color-black);
+            position: relative;
+            border-radius: $border_radius;
+            padding: $padding_in_item 1.6em $padding_in_item $padding_in_item;
+            overflow: hidden;
+            z-index: 0;
+            transition: scale 300ms ease-in-out;
+            font-size: 1em;
+
+            @media (max-width: 1100px) {
+                font-size: clamp(0.6em, 2vw, 1em);
+            }
+
+            @media (max-width: 740px) {
+                font-size: 0.9em;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "cover"
+                    "title"
+                    "descr"
+                    "count";
+                grid-template-rows: 17.5em;
+                grid-auto-rows: auto;
+                height: auto;
+                padding: $padding_in_item;
+
+                .title {
+                    padding-top: 0.4em !important;
+                }
+
+                .count-cases {
+                    display: none;
+                }
+            }
+
+            &:hover {
+                scale: 1.005;
+            }
+
+            .link {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+
+                &:hover {
+                    background-color: rgba($color: #fff, $alpha: 0.02);
+                }
+            }
+
+            .title {
+                grid-area: title;
+                font-size: 1.4em;
+                line-height: 1em;
+                font-weight: 700;
+                color: var(--color-basic-white);
+                padding-top: 1em;
+            }
+
+            .descr {
+                grid-area: descr;
+                font-size: 0.9em;
+                font-weight: 300;
+                color: var(--color-basic-white-80);
+            }
+
+            .count-cases {
+                grid-area: count;
+                font-size: 0.9em;
+                font-weight: 300;
+                color: var(--color-basic-white-80);
+                text-align: right;
+            }
+
+            picture {
+                grid-area: cover;
+                width: 100%;
+                height: 100%;
+                border-radius: $border_radius - $padding_in_item;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+
+        &__end {
+            color: var(--color-basic-white);
+            align-self: center;
+            padding: 1.5em 0 5em 0;
+            font-size: clamp(0.8em, 2vw, 1.2em);
+            line-height: 1.4em;
+            font-weight: 200;
+            font-style: italic;
+            text-align: center;
+        }
+    }
+</style>

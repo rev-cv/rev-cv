@@ -1,4 +1,5 @@
 ---
+import { loadAllPortfolios } from "../data/portfolios/_portfolios";
 import Layout from "../layouts/Layout.astro";
 import HeroBanner from "../components/HeroBanner.astro";
 import AboutMe from "../components/AboutMeCards.astro";
@@ -11,34 +12,14 @@ import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
 // ↓ статические пути для всех доступных резюме
 export async function getStaticPaths() {
-    const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-        "../data/portfolios/*.json",
-        { eager: true }
-    );
-
-    const allPortfolios: PortfolioItem[] = [];
-    for (const path in portfoliosJSON) {
-        const portfolio = portfoliosJSON[path].default;
-        allPortfolios.push(portfolio);
-    }
-
+    const allPortfolios = loadAllPortfolios();
     return allPortfolios.map((portfolio) => ({
         params: { resume: portfolio.url },
     }));
 }
 
-// ↓ импорт всех JSON файлов с портфолио из папки portfolios
-const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../data/portfolios/*.json",
-    { eager: true }
-);
-const allPortfolios: PortfolioItem[] = [];
-for (const path in portfoliosJSON) {
-    const portfolio = portfoliosJSON[path].default;
-    allPortfolios.push(portfolio);
-}
-
 // ↓ получить текущий slug из URL и по нему найти нужное портфолио
+const allPortfolios = loadAllPortfolios();
 const { resume: resumeSlug } = Astro.params;
 const currentResume = allPortfolios.find(
     (portfolio) => portfolio.url === resumeSlug
@@ -89,5 +70,5 @@ const cases = allCases
     <SkillsAndTools title="Soft Skills" items={currentResume.quality} />
     <SkillsAndTools title="Инструменты" items={currentResume.tools} />
     <Education />
-    <Contacts />
+    <Contacts isBriefly={true} />
 </Layout>

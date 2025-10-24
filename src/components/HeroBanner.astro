@@ -1,50 +1,12 @@
 ---
+import { loadAllPortfolios } from "../data/portfolios/_portfolios";
 import SVGMail from "../assets/email.svg";
 import SVGGitHub from "../assets/github.svg";
 import SVGTelegram from "../assets/telegram.svg";
 import contacts from "../data/contacts.json";
 
-/**
- * Props компонента HeroBanner
- * @interface Props
- */
-interface Props {
-    /** Данные текущей роли портфолио */
-    resume: {
-        jobtitle: string;
-        description: string;
-        url: string;
-    };
-}
-
 const { resume } = Astro.props;
-
-import type { TypePortfoliosGlob } from "../types/TypePortfolio";
-
-/**
- * Загружает все JSON файлы портфолио из папки portfolios
- * Использует import.meta.glob для динамической загрузки
- */
-const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../data/portfolios/*.json",
-    {
-        eager: true,
-    }
-);
-
-/**
- * Массив портфолио с базовой информацией для навигации
- * Содержит только jobtitle и url для отображения в меню
- */
-const portfolios = [];
-
-for (const path in portfoliosJSON) {
-    const portfolio = portfoliosJSON[path].default;
-    portfolios.push({
-        jobtitle: portfolio.jobtitle,
-        url: portfolio.url,
-    });
-}
+const portfolios = loadAllPortfolios();
 ---
 
 <div class="hero-banner">

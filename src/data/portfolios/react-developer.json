@@ -1,9 +1,9 @@
 {
     "jobtitle": "React Developer",
-    "description": "Создаю современные и функциональные веб-приложения с фокусом на пользовательский опыт. Специализируюсь на React, TypeScript и современных технологиях фронтенда.",
+    "description": "Разрабатываю надежные и производительные приложения на React, сочетая современные подходы и чистую архитектуру. Забочусь о скорости, стабильности и удобстве развития проекта.",
     "url": "react-dev",
     "cases": ["web-app-ptm"],
-    "cover": "seo/frontend-developer.webp",
+    "cover": "seo/react-developer.webp",
     "keywords": [
         "frontend developer",
         "front-end",
@@ -21,33 +21,128 @@
     "skills": [
         {
             "name": "React",
-            "level": 90,
+            "level": 3,
             "description": "Создание компонентов и управление состоянием"
         },
         {
             "name": "TypeScript",
-            "level": 85,
+            "level": 2,
             "description": "Типизированный JavaScript"
         },
         {
             "name": "JavaScript (ES6+)",
-            "level": 95,
+            "level": 3,
             "description": "Современный JavaScript"
         },
         {
             "name": "CSS/SCSS",
-            "level": 80,
+            "level": 3,
             "description": "Стилизация и адаптивный дизайн"
         },
         {
             "name": "Redux",
-            "level": 70,
+            "level": 1,
             "description": "Управление состоянием приложения"
         },
         {
-            "name": "Webpack/Vite",
-            "level": 75,
-            "description": "Сборка и оптимизация проектов"
+            "name": "MobX",
+            "level": 0,
+            "description": "Реактивное управление состоянием"
+        },
+        {
+            "name": "Jotai",
+            "level": 3,
+            "description": "Легковесная альтернатива Redux для управления состоянием в React"
+        },
+        {
+            "name": "GraphQL/Apollo",
+            "level": 0,
+            "description": "Работа с GraphQL API"
+        },
+        {
+            "name": "Form Libraries",
+            "level": 1,
+            "description": "Formik, React Hook Form для работы с формами"
+        },
+        {
+            "name": "React Router",
+            "level": 2,
+            "description": "Навигация и маршрутизация страниц"
+        },
+        {
+            "name": "Next.js",
+            "level": 1,
+            "description": "SSR и динамические маршруты"
+        },
+        {
+            "name": "Lazy Loading",
+            "level": 1,
+            "description": "Загрузка компонентов по требованию"
+        },
+        {
+            "name": "CSS Modules",
+            "level": 1,
+            "description": "Локальные стили для компонентов"
+        },
+        {
+            "name": "Styled Components",
+            "level": 1,
+            "description": "CSS-in-JS решение для React"
+        },
+        {
+            "name": "Tailwind CSS",
+            "level": 1,
+            "description": "Utility-first CSS фреймворк"
+        },
+        {
+            "name": "Security",
+            "level": 2,
+            "description": "CORS, JWT, OAuth, защита от CSRF, HTTPS, CORS, CSP, iframe sandboxing, безопасные заголовки"
+        },
+        {
+            "name": "Framer Motion",
+            "level": 1,
+            "description": "Управление состоянием приложения"
+        },
+        {
+            "name": "Memoization",
+            "level": 1,
+            "description": "useMemo, React.memo для оптимизации"
+        },
+        {
+            "name": "Virtualization",
+            "level": 0,
+            "description": "Виртуализация длинных списков"
+        },
+        {
+            "name": "CI/CD",
+            "level": 2,
+            "description": "Настройка автоматизированных процессов сборки, тестирования и деплоя"
+        },
+        {
+            "name": "Accessibility",
+            "level": 0,
+            "description": "Доступность интерфейсов (a11y)"
+        },
+        {
+            "name": "i18n",
+            "level": 0,
+            "description": "Интернационализация приложений"
+        },
+        {
+            "name": "WebSockets",
+            "level": 2,
+            "description": "Двустороннее соединение для живого обмена данными без перезагрузок"
+        },
+        {
+            "name": "REST API",
+            "level": 3,
+            "description": "Интеграция с бэкенд-сервисами, CRUD операции, работа с HTTP"
+        },
+        {
+            "name": "HTTP/HTTPS",
+            "level": 3,
+            "description": "Протоколы, методы, заголовки, статус-коды"
         }
     ],
     "tools": [
@@ -78,6 +173,10 @@
         {
             "name": "Chrome DevTools",
             "description": "Инструменты разработчика для отладки и профилирования React приложений"
+        },
+        {
+            "name": "React DevTools",
+            "description": "Инструменты разработчика для React-приложений"
         },
         {
             "name": "Postman",
@@ -195,5 +294,16 @@
             "title": "UI/UX внимание к деталям",
             "descr": "Прорабатываю дизайн-системы и микроанимации, чтобы интерфейсы были удобными и привлекательными."
         }
+    ],
+    "roadmap": [
+        "Глубокое изучение React и современных подходов к разработке компонентов",
+        "Освоение продвинутого управления состоянием и взаимодействия с API",
+        "Углубление навыков TypeScript и типизации для надежного кода",
+        "Повышение производительности приложений через оптимизацию и профайлинг",
+        "Развитие навыков доступной верстки (a11y)",
+        "Освоение тестирования: юнит, интеграционные и E2E тесты",
+        "Развитие навыков CI/CD, автоматизации сборки и деплоя",
+        "Изучение PWA и технологий для offline-first приложений",
+        "Следование современным трендам фронтенд-разработки и новым инструментам"
     ]
 }

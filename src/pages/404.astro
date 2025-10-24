@@ -1,25 +1,7 @@
 ---
+import { loadAllPortfolios } from "../data/portfolios/_portfolios";
 import Layout from "../layouts/Layout.astro";
-import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
-
-/**
- * Загружает все JSON файлы портфолио для отображения доступных ролей
- */
-const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../data/portfolios/*.json",
-    {
-        eager: true,
-    }
-);
-
-/**
- * Создает массив всех доступных портфолио
- */
-const allPortfolios: PortfolioItem[] = [];
-for (const path in portfoliosJSON) {
-    const portfolio = portfoliosJSON[path].default;
-    allPortfolios.push(portfolio);
-}
+const allPortfolios = loadAllPortfolios();
 ---
 
 <Layout title="Страница не найдена - Ревин Роман">

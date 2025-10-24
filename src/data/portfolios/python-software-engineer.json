@@ -1,6 +1,6 @@
 {
     "jobtitle": "Python Software Engineer",
-    "description": "Разрабатываю многофункциональные приложения на Python. Мой опыт включает создание десктопных приложений с помощью PyQt, автоматизацию рутинных задач, парсинг данных и разработку Telegram-ботов.",
+    "description": "[ in the process of advanced training… ]",
     "url": "python-engineer",
     "cases": [],
     "cover": "seo/python-software-engineer.webp",
@@ -18,38 +18,7 @@
         "middle developer",
         "projects"
     ],
-    "skills": [
-        {
-            "name": "Python Language",
-            "level": 95,
-            "description": "Python Language"
-        },
-        {
-            "name": "PyQt",
-            "level": 76,
-            "description": "PyQt"
-        },
-        {
-            "name": "Telegram Bot",
-            "level": 65,
-            "description": "Telegram Bot"
-        },
-        {
-            "name": "Data Parsing",
-            "level": 80,
-            "description": "Data Parsing"
-        },
-        {
-            "name": "Automation",
-            "level": 80,
-            "description": "Automation"
-        },
-        {
-            "name": "Desktop Applications",
-            "level": 70,
-            "description": "Desktop Applications"
-        }
-    ],
+    "skills": [],
     "tools": [
         {
             "name": "VS Code",

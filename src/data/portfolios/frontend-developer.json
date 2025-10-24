@@ -136,7 +136,7 @@
             "description": "Векторная графика, иконки, спрайты"
         },
         {
-            "name": "Browser Security",
+            "name": "Security",
             "level": 2,
             "description": "CORS, JWT, OAuth, защита от CSRF, HTTPS, CORS, CSP, iframe sandboxing, безопасные заголовки"
         },

@@ -98,6 +98,12 @@
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
 
+        transition: scale 300ms ease-in-out;
+
+        &:hover {
+            scale: 1.01;
+        }
+
         &__title {
             position: absolute;
             top: 0;

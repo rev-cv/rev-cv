@@ -5,6 +5,8 @@ import SVGGitHub from "../assets/github.svg";
 import SVGTelegram from "../assets/telegram.svg";
 import contacts_raw from "../data/contacts.json";
 
+const { isBriefly } = Astro.props;
+
 const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
     if (key === "email") {
         return {
@@ -27,10 +29,15 @@ const contacts = Object.entries(contacts_raw).map(([key, elem]) => {
 ---
 
 <div class="contacts container" id="block-contacts">
-    <h2 class="contacts__title">Контакты</h2>
-    <div class="contacts__appeal">
-        Готов помочь воплотить ваши идеи в жизнь.
-    </div>
+    {
+        isBriefly && (
+            <h2 class="contacts__title">Контакты</h2>
+            <div class="contacts__appeal">
+                Готов помочь воплотить ваши идеи в жизнь.
+            </div>
+        )
+    }
+    
     <div class="contacts__list">
         {
             contacts.map((contact) => {

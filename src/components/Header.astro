@@ -36,7 +36,7 @@ const base = import.meta.env.BASE_URL;
                 display: flex;
                 justify-content: space-between;
                 padding: 0.8em;
-                border-radius: 6px;
+                border-radius: 2em;
                 border: 1px solid transparent;
                 transition:
                     background-color 300ms ease-in-out,
@@ -53,9 +53,9 @@ const base = import.meta.env.BASE_URL;
                 a {
                     color: var(--color-basic-white-80);
                     text-decoration: none;
-                    padding: 0.5em;
+                    padding: 0.5em 0.8em;
                     font-size: 0.8em;
-                    border-radius: 0.3em;
+                    border-radius: calc(2em - 16px);
                     position: relative;
                     overflow: hidden;
                     cursor: pointer;

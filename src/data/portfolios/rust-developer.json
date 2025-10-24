@@ -1,6 +1,6 @@
 {
     "jobtitle": "Rust Developer",
-    "description": "Создаю современные и функциональные веб-приложения с фокусом на пользовательский опыт. Специализируюсь на React, TypeScript и современных технологиях фронтенда.",
+    "description": "[ in the process of advanced training… ]",
     "url": "rust-dev",
     "cases": [],
     "cover": "seo/rust-developer.webp",
@@ -18,38 +18,7 @@
         "middle developer",
         "projects"
     ],
-    "skills": [
-        {
-            "name": "React",
-            "level": 90,
-            "description": "Создание компонентов и управление состоянием"
-        },
-        {
-            "name": "TypeScript",
-            "level": 85,
-            "description": "Типизированный JavaScript"
-        },
-        {
-            "name": "JavaScript (ES6+)",
-            "level": 95,
-            "description": "Современный JavaScript"
-        },
-        {
-            "name": "CSS/SCSS",
-            "level": 80,
-            "description": "Стилизация и адаптивный дизайн"
-        },
-        {
-            "name": "Redux",
-            "level": 70,
-            "description": "Управление состоянием приложения"
-        },
-        {
-            "name": "Webpack/Vite",
-            "level": 75,
-            "description": "Сборка и оптимизация проектов"
-        }
-    ],
+    "skills": [],
     "tools": [
         {
             "name": "VS Code",
