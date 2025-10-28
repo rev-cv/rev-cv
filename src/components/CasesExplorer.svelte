@@ -151,7 +151,6 @@
                                 muted="muted"
                                 data-fetchpriority="low"
                                 class="loadding"
-                                onprogress={videoSuccessLoaded}
                             ></video>
                         {:else}
                             <img

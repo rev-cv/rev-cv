@@ -256,7 +256,6 @@
                                 autoplay={openMediaUrl !== media}
                                 loop={openMediaUrl !== media}
                                 class="loadding"
-                                onprogress={videoSuccessLoaded}
                             ></video>
 
                             {#if openMediaUrl === media}
