@@ -6,7 +6,7 @@ import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
  * Загружает все JSON файлы портфолио для отображения всех ролей
  */
 const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../data/portfolios/*.json",
+    "../content/portfolios/*.json",
     {
         eager: true,
     }

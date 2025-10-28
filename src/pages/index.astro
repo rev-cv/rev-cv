@@ -5,7 +5,7 @@ import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 // все JSON файлы портфолио из папки portfolios
 // import.meta.glob для динамической загрузки
 const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../data/portfolios/*.json",
+    "../content/portfolios/*.json",
     {
         eager: true,
     }

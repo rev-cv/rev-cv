@@ -1,5 +1,7 @@
 <script>
+    import { onMount } from "svelte";
     import CaseModal from "./CaseModal.svelte";
+    import Loadding from "./Loadding.svelte";
 
     let isModalOpen = $state(false);
     let { metadata, content } = $props();
@@ -26,7 +28,32 @@
         }
     }
 
-    $effect(() => scrollLock(isModalOpen ? true : false));
+    $effect(() => scrollLock(!!isModalOpen));
+
+    function videoSuccessLoaded(e) {
+        const video = e.currentTarget;
+        if (video.duration > 0) {
+            if (
+                video.buffered.length > 0 &&
+                video.buffered.end(0) >= video.duration
+            ) {
+                console.log("Весь видеофайл полностью загружен!");
+                video.classList.remove("loadding");
+            }
+        }
+    }
+
+    onMount(() => {
+        const handlePopState = () => {
+            if (!window.location.pathname.includes("/cases/")) {
+                isModalOpen = false;
+            }
+        };
+        window.addEventListener("popstate", handlePopState);
+        return () => {
+            window.removeEventListener("popstate", handlePopState);
+        };
+    });
 </script>
 
 <button
@@ -48,13 +75,22 @@
             {#if isVideo(metadata.cover)}
                 <video
                     src={`${import.meta.env.BASE_URL}${metadata.cover}`}
+                    poster={`${import.meta.env.BASE_URL}${metadata.cover.replace(
+                        /\.mp4$/,
+                        ".webp",
+                    )}`}
                     preload="auto"
                     autoplay="autoplay"
                     playsinline="playsinline"
                     loop="loop"
                     muted="muted"
                     data-fetchpriority="low"
+                    class="loadding"
+                    onprogress={videoSuccessLoaded}
                 ></video>
+                <div class="is-loading">
+                    <Loadding />
+                </div>
             {:else}
                 <img
                     src={`${import.meta.env.BASE_URL}${metadata.cover}`}
@@ -112,6 +148,7 @@
             border-bottom-left-radius: calc($border_radius / 2);
             color: var(--color-basic-white-80);
             user-select: none;
+            z-index: 2;
 
             h3 {
                 position: relative;
@@ -149,12 +186,27 @@
             flex-grow: 1;
             border-radius: calc($border_radius - $padding_in_item);
             overflow: hidden;
+            position: relative;
 
             video,
             img {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+            }
+
+            .is-loading {
+                position: absolute;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                z-index: 1;
+            }
+
+            &:has(.loadding) .is-loading {
+                display: flex;
             }
         }
 
@@ -167,6 +219,7 @@
             display: flex;
             flex-wrap: wrap-reverse;
             gap: 0.5em;
+            z-index: 2;
 
             > div {
                 background-color: var(--color-black-60);

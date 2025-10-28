@@ -1,0 +1,53 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CasesExplorer from "../../components/CasesExplorer.svelte";
+import { loadAllPortfolios } from "../../content/portfolios/_portfolios";
+
+// 1. Загружаем все кейсы
+const caseImports = await Astro.glob("../../content/cases/*.md");
+const allCases = Object.values(caseImports).map((importCase) => {
+    const { url, tech, title, descr, cover } = importCase.frontmatter;
+    return {
+        metadata: {
+            url,
+            tech,
+            title,
+            descr,
+            cover,
+        },
+    };
+});
+
+// 2. Загружаем все портфолио для получения списка ролей
+const allPortfoliosRaw = loadAllPortfolios();
+const allPortfolios = allPortfoliosRaw.map(({ url, jobtitle, cases }) => ({
+    url,
+    jobtitle,
+    cases,
+}));
+
+// 3. Собираем все уникальные теги из всех кейсов
+const allTags = [
+    ...new Set(allCases.flatMap((c) => c.metadata.tech || [])),
+].sort();
+
+// 4. Формируем данные для фильтров
+const filtersData = {
+    roles: allPortfolios.map((p) => ({ id: p.url, name: p.jobtitle })),
+    tags: allTags,
+};
+---
+
+<Layout
+    title="Все кейсы"
+    description="Обзор всех выполненных проектов с возможностью фильтрации и поиска."
+>
+    <main class="page-container">
+        <CasesExplorer
+            client:load
+            {allCases}
+            {filtersData}
+            allPortfolios={allPortfolios}
+        />
+    </main>
+</Layout>

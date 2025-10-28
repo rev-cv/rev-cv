@@ -1,0 +1,28 @@
+<div class="loader"></div>
+
+<style>
+    .loader {
+        height: 80px;
+        aspect-ratio: 1;
+        padding: 10px;
+        border-radius: 50%;
+        box-sizing: border-box;
+        position: relative;
+        mask:
+            conic-gradient(#000 0 0) content-box exclude,
+            conic-gradient(#000 0 0);
+        filter: blur(12px);
+    }
+    .loader:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: conic-gradient(#0000 35%, var(--color-azure), #0000 65%);
+        animation: l1 600ms linear infinite;
+    }
+    @keyframes l1 {
+        to {
+            rotate: 1turn;
+        }
+    }
+</style>

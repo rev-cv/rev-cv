@@ -1,5 +1,5 @@
 ---
-import { loadAllPortfolios } from "../data/portfolios/_portfolios";
+import { loadAllPortfolios } from "../content/portfolios/_portfolios";
 import Layout from "../layouts/Layout.astro";
 import HeroBanner from "../components/HeroBanner.astro";
 import AboutMe from "../components/AboutMeCards.astro";
@@ -35,7 +35,7 @@ const otherPortfolios = allPortfolios.filter(
     (portfolio) => portfolio.url !== resumeSlug
 );
 
-const caseImports = await Astro.glob("../data/cases/*.md");
+const caseImports = await Astro.glob("../content/cases/*.md");
 const allCases = await Promise.all(
     Object.values(caseImports).map(async (importCase) => ({
         metadata: importCase.frontmatter,

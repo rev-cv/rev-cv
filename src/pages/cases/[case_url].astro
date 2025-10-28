@@ -1,0 +1,43 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+interface Props {
+    caseItem: CollectionEntry<"cases">;
+}
+
+// Генерация статических путей
+export async function getStaticPaths() {
+    const cases = await getCollection("cases");
+
+    return cases.map((caseItem: CollectionEntry<"cases">) => ({
+        params: { case_url: caseItem.slug },
+        props: { caseItem },
+    }));
+}
+
+const { caseItem } = Astro.props as Props;
+const { Content } = await caseItem.render();
+---
+
+<Layout
+    title={caseItem.data.title}
+    description={caseItem.data.descr}
+    cover={caseItem.data.cover}
+    keywords={caseItem.data.tech}
+>
+    <div class="case-page container">
+        <Content />
+    </div>
+</Layout>
+
+<style lang="scss">
+    @use "../../styles/md-text" as md;
+
+    $border_radius: 2rem;
+    $padding_in_item: 0.6rem;
+
+    .case-page {
+        @include md.message-shared($padding_in_item, $border_radius);
+    }
+</style>

@@ -1,4 +1,6 @@
 <script>
+    const BASE_URL = import.meta.env.BASE_URL;
+
     let isModalView = $state(false);
     import SVGDemo from "../assets/SVGDemo.svelte";
     import SVGCode from "../assets/SVGCode.svelte";
@@ -55,22 +57,33 @@
     }
 
     $effect(() => {
+        const newUrl = `${BASE_URL}cases/${metadata.url}`;
+        history.pushState({ caseUrl: metadata.url }, "", newUrl);
+
         setTimeout(() => {
             isModalView = true;
             updateStyleForScreenSize();
         }, 10);
 
+        const handlePopState = (event) => {
+            // Если мы вернулись из состояния, где был открыт кейс, закрываем модалку
+            if (event.state?.caseUrl !== metadata.url) {
+                closeModal(true); // Закрываем без изменения истории
+            }
+        };
+
+        window.addEventListener("popstate", handlePopState);
         document.addEventListener("keydown", handleKeydown);
         window.addEventListener("resize", updateStyleForScreenSize);
         return () => {
+            window.removeEventListener("popstate", handlePopState);
             document.removeEventListener("keydown", handleKeydown);
             window.removeEventListener("resize", updateStyleForScreenSize);
         };
     });
 
-    function closeModal() {
-        style = initialStyle;
-        isModalView = false;
+    function closeModal(isFromHistory = false) {
+        unmounte();
     }
 
     function handleKeydown(e) {
@@ -81,7 +94,7 @@
 
     function handleTransitionEnd(e) {
         if (e.propertyName === "transform" && !isModalView) {
-            unmounte();
+            // unmounte();
         }
     }
 
@@ -202,7 +215,7 @@
 <div
     class="curtain"
     class:render={isModalView}
-    onclick={closeModal}
+    onclick={() => history.back()}
     onkeydown={(e) => e.key === "Enter" && closeModal()}
     aria-label="Закрыть модальное окно"
     role="button"
@@ -230,15 +243,22 @@
                     {#if isVideo(media)}
                         <div class="video-wrapper">
                             <video
-                                src={`${import.meta.env.BASE_URL}${media}`}
+                                src={`${BASE_URL}${media}`}
                                 preload="metadata"
+                                poster={`${BASE_URL}${media.replace(
+                                    /\.mp4$/,
+                                    ".webp",
+                                )}`}
                                 playsinline
                                 data-fetchpriority="low"
                                 controls={openMediaUrl === media}
                                 muted={openMediaUrl !== media}
                                 autoplay={openMediaUrl !== media}
                                 loop={openMediaUrl !== media}
+                                class="loadding"
+                                onprogress={videoSuccessLoaded}
                             ></video>
+
                             {#if openMediaUrl === media}
                                 <div
                                     class="close-overlay"
@@ -270,10 +290,7 @@
                         </div>
                     {:else}
                         <picture>
-                            <img
-                                src={`${import.meta.env.BASE_URL}${media}`}
-                                alt=""
-                            />
+                            <img src={`${BASE_URL}${media}`} alt="" />
                         </picture>
                     {/if}
                 </button>
@@ -347,10 +364,14 @@
         </div>
     </div>
 
-    <button class="btn-close" onclick={closeModal}><SVGClose /></button>
+    <button class="btn-close" onclick={() => history.back()}
+        ><SVGClose /></button
+    >
 </div>
 
 <style lang="scss">
+    @use "../styles/md-text" as md;
+
     $border_radius: 2rem;
     $padding_in_item: 0.6rem;
 
@@ -422,7 +443,7 @@
                         position: absolute;
                         inset: 0;
                         /* Оставляем 40px снизу для контролов */
-                        bottom: 40px;
+                        bottom: 4em;
                         cursor: pointer;
                         /* z-index, чтобы быть над видео, но под его контролами */
                         z-index: 1;
@@ -459,201 +480,7 @@
             }
 
             .right-scroll {
-                overflow-y: auto;
-                padding-right: $padding_in_item;
-                display: flex;
-                flex-direction: column;
-
-                > * {
-                    opacity: 0;
-                    transform: translateY(1em);
-                    transition:
-                        opacity 300ms ease-out,
-                        transform 300ms ease-out;
-                }
-
-                .title {
-                    color: var(--color-basic-white);
-                    font-size: 1.4em;
-                    line-height: 1.1em;
-                    font-weight: 800;
-                    text-align: center;
-                    padding-top: 1em;
-                }
-
-                .descr {
-                    color: var(--color-basic-white-80);
-                    font-size: 0.8em;
-                    line-height: 1.1em;
-                    max-width: 80%;
-                    align-self: center;
-                    text-align: center;
-                    padding: 1em 0;
-                }
-
-                .content {
-                    color: var(--color-basic-white);
-                }
-
-                .case-nav {
-                    display: flex;
-                    justify-content: center;
-                    padding: 0.5em 0;
-                    gap: 1em;
-
-                    a {
-                        color: var(--color-basic-white);
-                        text-transform: uppercase;
-                        text-decoration: none;
-                        display: flex;
-                        align-items: center;
-                        gap: 0.5em;
-                        font-size: 0.8em;
-                        background-color: black;
-                        padding: 0.3em 0.6em;
-                        border-radius: 3px;
-                        font-weight: 500;
-
-                        transition:
-                            color 300ms ease-in-out,
-                            transform 200ms ease-in-out,
-                            background-color 300ms ease-in-out;
-                        position: relative;
-
-                        &::after {
-                            position: absolute;
-                            inset: 0;
-                            content: "";
-                            background-color: transparent;
-                            transition: background-color 300ms ease-in-out;
-                        }
-
-                        &:hover {
-                            color: var(--color-azure);
-                            background-color: #000;
-                            transform: translateY(-2px);
-
-                            &::after {
-                                background-color: var(--color-button-hover-bg);
-                            }
-                        }
-                    }
-
-                    :global(svg) {
-                        width: 1.3em;
-                        height: 1.3em;
-                        opacity: 0.8;
-                    }
-
-                    :global(:is(a)) {
-                        color: var(--color-azure);
-                        text-decoration: none;
-                        opacity: 0.9;
-                        transition: opacity 300ms ease-in-out;
-
-                        &:hover {
-                            opacity: 1;
-                        }
-                    }
-
-                    &:last-child {
-                        padding: 2em;
-                    }
-                }
-
-                :global(:is(a)) {
-                    color: var(--color-azure);
-                    text-decoration: none;
-                    opacity: 0.9;
-                    transition: opacity 300ms ease-in-out;
-
-                    &:hover {
-                        opacity: 1;
-                    }
-                }
-
-                :global(:is(li)) {
-                    padding: 0.5em 0 0.5em 1.6em;
-                    display: flex;
-                    position: relative;
-
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        width: 0.25em;
-                        height: 0.25em;
-                        top: 0.6em + 0.5em;
-                        left: 0.5em;
-                        background-color: var(--color-basic-white-80);
-                        border-radius: 50%;
-                    }
-                }
-
-                :global(img) {
-                    object-fit: contain;
-                }
-
-                :global(:is(p:has(img))) {
-                    max-height: 25em;
-                    overflow: hidden;
-                    border-radius: $border_radius;
-                    padding: 0;
-                    margin: 1em 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-
-                :global(:is(h4, h5, h6, h1, h2, h3)) {
-                    font-size: 1.3em;
-                    padding: 1.2em 0 0 0;
-                    color: var(--color-basic-white-80);
-                    margin-bottom: -0.3em;
-                }
-
-                :global(:is(p, li)) {
-                    font-size: 0.9em;
-                }
-
-                :global(li) {
-                    display: inline-block;
-                    flex-wrap: wrap;
-
-                    &:last-child {
-                        padding-bottom: 0;
-                    }
-
-                    &:first-child {
-                        padding-top: 0;
-
-                        &::before {
-                            top: 0.6em !important;
-                        }
-                    }
-                }
-
-                :global(:is(p, ul)) {
-                    padding: 1em 0 0.1em 0;
-                }
-
-                :global(hr) {
-                    padding-top: 0;
-                    margin: 1em 0 0.1em 0;
-                    height: 1px;
-                    width: 90%;
-                    justify-self: center;
-                    opacity: 0.2;
-                }
-
-                :global(code) {
-                    color: var(--color-code);
-                    background-color: var(--color-code-bg);
-                    padding: 0.2em 0.4em;
-                    // margin: -0.2em;
-                    line-height: 1em;
-                    font-size: 0.9em;
-                    border-radius: 2px;
-                }
+                @include md.message-shared($padding_in_item, $border_radius);
             }
         }
 

@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Contacts from "../components/Contacts.astro";
-import { loadAllPortfolios } from "../data/portfolios/_portfolios";
+import { loadAllPortfolios } from "../content/portfolios/_portfolios";
 const portfolios = loadAllPortfolios().sort((a, b) => {
     return b.cases.length - a.cases.length;
 });
