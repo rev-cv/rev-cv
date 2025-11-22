@@ -1,183 +1,139 @@
 <script>
-    import { onMount } from "svelte";
-
-    // 1. Получаем пропсы через руну $props
-    // Обратите внимание: я переименовал unmounte в unmount для чистоты
     let { rect, unmount, mediaUrl } = $props();
 
-    // 2. Реактивное состояние через руну $state
+    let modalNode = $state(null);
     let isClosing = $state(false);
-    let modalNode = $state();
+    let isVisible = $state(false);
 
-    // Состояние для анимации контента (изображения/видео)
-    let contentRect = $state({
-        top: rect.top + "px",
-        left: rect.left + "px",
-        width: rect.width + "px",
-        height: rect.height + "px",
-        opacity: 0, // Начинаем с прозрачного контента
+    // Вычисляем стартовые стили заранее — на основе размеров кнопки
+    const initialStyles = $derived(() => {
+        if (!rect) return null;
+
+        return {
+            "--initial-scale-x": rect.width / window.innerWidth,
+            "--initial-scale-y": rect.height / window.innerHeight,
+            "--initial-x": `${rect.left - (window.innerWidth - rect.width) / 2}px`,
+            "--initial-y": `${rect.top - (window.innerHeight - rect.height) / 2}px`,
+        };
     });
-    let showBackdrop = $state(false); // Состояние для фона-"шторки"
+
+    // Переводим их в inline-строку, чтобы применить на корневой контейнер
+    const inlineInitialStyles = $derived(() => {
+        if (!initialStyles) return "";
+        return Object.entries(initialStyles)
+            .map(([k, v]) => `${k}:${v}`)
+            .join(";");
+    });
 
     function isVideo(url) {
         return url && url.toLowerCase().endsWith(".mp4");
     }
 
     function closeModal() {
-        if (isClosing) return;
-
         isClosing = true;
-
-        // Возвращаем координаты обратно к размерам карточки
-        contentRect = {
-            top: rect.top + "px",
-            left: rect.left + "px",
-            width: rect.width + "px",
-            height: rect.height + "px",
-            opacity: 0,
-        };
-
-        setTimeout(() => {
-            if (unmount) unmount();
-        }, 350);
+        isVisible = false;
+        setTimeout(unmount, 300);
     }
 
     function handleBackdropClick(event) {
-        // Проверяем, что клик был именно по подложке
         if (event.target === event.currentTarget) {
             closeModal();
         }
     }
 
-    function handleContentClick(event) {
-        // В Svelte 5 нет модификаторов событий типа |stopPropagation,
-        // делаем это явно в функции
-        if (event.target === event.currentTarget) {
-            closeModal();
+    // Управление появлением + запуск анимации
+    $effect(() => {
+        if (!rect) {
+            isClosing = false;
+            return;
         }
-        event.stopPropagation();
-    }
 
-    onMount(() => {
-        // Устанавливаем фокус для доступности (accessibility)
         modalNode?.focus();
 
-        // Плавное открытие: ждем 1 кадр, чтобы браузер отрисовал начальное положение,
-        // затем разворачиваем на весь экран
+        // Фиксируем стартовый transform (критический момент)
+        void modalNode?.offsetWidth;
+
         requestAnimationFrame(() => {
-            // 1. Показываем фон
-            showBackdrop = true;
-            // 2. Анимируем контент в центр
-            contentRect = {
-                ...contentRect, // сохраняем начальные размеры
-                opacity: 1,
-            };
+            if (!isClosing) isVisible = true;
         });
 
         const handleKeydown = (e) => {
-            if (e.key === "Escape") {
+            if (e.key === "Escape" && !isClosing) {
                 closeModal();
             }
         };
 
         window.addEventListener("keydown", handleKeydown);
-
-        return () => {
-            window.removeEventListener("keydown", handleKeydown);
-        };
+        return () => window.removeEventListener("keydown", handleKeydown);
     });
 </script>
 
-<div
-    class="media-modal"
-    class:is-closing={isClosing}
-    bind:this={modalNode}
-    class:show-backdrop={showBackdrop}
-    onclick={(event) => handleBackdropClick(event)}
-    role="dialog"
-    aria-modal="true"
-    tabindex="-1"
->
+{#if rect}
     <div
-        class="media-modal__content"
-        style:--top={contentRect.top}
-        style:--left={contentRect.left}
-        style:--width={contentRect.width}
-        style:--height={contentRect.height}
-        style:--opacity={contentRect.opacity}
-        onclick={(event) => handleContentClick(event)}
+        class="media-modal"
+        class:is-visible={isVisible}
+        bind:this={modalNode}
+        onclick={handleBackdropClick}
+        role="dialog"
+        aria-modal="true"
+        tabindex="-1"
+        style={inlineInitialStyles}
     >
-        {#if isVideo(mediaUrl)}
-            <video src={mediaUrl} autoplay controls playsinline></video>
-        {:else}
-            <img src={mediaUrl} alt="Full screen media" />
-        {/if}
+        <div class="media-modal__content" onclick={(e) => e.stopPropagation()}>
+            {#if isVideo(mediaUrl)}
+                <video src={mediaUrl} autoplay controls playsinline></video>
+            {:else}
+                <img src={mediaUrl} alt="Развернутое медиа" />
+            {/if}
+        </div>
     </div>
-</div>
+{/if}
 
 <style lang="scss">
     .media-modal {
-        position: fixed;
-        inset: 0; // Растягиваем на весь экран
+        position: fixed; /* Используем fixed для позиционирования относительно окна */
+        inset: 0;
         background-color: transparent;
         backdrop-filter: blur(0px);
         z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         transition:
-            background-color 350ms ease,
-            backdrop-filter 350ms ease;
+            background-color 300ms ease,
+            backdrop-filter 300ms ease;
 
-        // Когда "шторка" активна
-        &.show-backdrop {
+        &.is-visible {
             background-color: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
-        }
-
-        &.is-closing {
-            background-color: transparent;
-            backdrop-filter: blur(0px);
 
             .media-modal__content {
-                opacity: 0;
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
             }
         }
 
         &__content {
-            // Начальное положение и размер берутся из JS
-            position: absolute;
-            top: var(--top);
-            left: var(--left);
-            width: var(--width);
-            height: var(--height);
-            opacity: var(--opacity);
+            /* Начальное состояние задается через transform */
+            transform: translate(var(--initial-x), var(--initial-y))
+                scale(var(--initial-scale-x), var(--initial-scale-y));
+            opacity: 0;
+            transform-origin: center;
+            transition:
+                transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 300ms ease;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: default;
-            transition: all 1000ms cubic-bezier(0.4, 0, 0.2, 1);
-            // При открытии контент перемещается в центр
-            inset: 0;
-            margin: auto;
-            cursor: pointer;
+            /* Максимальные размеры в открытом состоянии */
+            max-width: 90vw;
+            max-height: 90vh;
 
             img,
             video {
-                max-width: 100%;
-                max-height: 100%;
+                display: block;
+                width: 100%;
+                height: 100%;
                 object-fit: contain;
                 border-radius: 0.5em;
-            }
-
-            // В раскрытом состоянии контент занимает доступное место с отступами
-            .media-modal.show-backdrop & {
-                // Убираем фиксированные размеры, чтобы контейнер
-                // подстраивался под размер медиа внутри.
-                width: auto;
-                height: auto;
             }
         }
     }

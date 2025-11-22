@@ -49,9 +49,7 @@
     {@render children()}
 </button>
 
-{#if modalRect}
-    <MediaModal rect={modalRect} {mediaUrl} unmount={handleClose} />
-{/if}
+<MediaModal rect={modalRect} {mediaUrl} unmount={handleClose} />
 
 <style>
     .media-viewer {
