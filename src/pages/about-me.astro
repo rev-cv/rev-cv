@@ -1,25 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
+import { getCollection } from "astro:content";
 
-/**
- * Загружает все JSON файлы портфолио для отображения всех ролей
- */
-const portfoliosJSON: TypePortfoliosGlob = import.meta.glob(
-    "../content/portfolios/*.json",
-    {
-        eager: true,
-    }
-);
-
-/**
- * Создает массив всех доступных портфолио
- */
-const allPortfolios: PortfolioItem[] = [];
-for (const path in portfoliosJSON) {
-    const portfolio = portfoliosJSON[path].default;
-    allPortfolios.push(portfolio);
-}
+const allPortfolioEntries = await getCollection("portfolios");
 ---
 
 <Layout title="Обо мне - Ревин Роман">
@@ -52,12 +35,12 @@ for (const path in portfoliosJSON) {
                     <h3>Мои специализации</h3>
                     <div class="skills-grid">
                         {
-                            allPortfolios.map((portfolio) => (
+                            allPortfolioEntries.map((entry) => (
                                 <div class="skill-card">
-                                    <h4>{portfolio.jobtitle}</h4>
-                                    <p>{portfolio.description}</p>
+                                    <h4>{entry.data.jobtitle}</h4>
+                                    <p>{entry.data.description}</p>
                                     <a
-                                        href={`${import.meta.env.BASE_URL}${portfolio.url}`}
+                                        href={`${import.meta.env.BASE_URL}${entry.data.url}`}
                                         class="skill-link"
                                     >
                                         Подробнее →

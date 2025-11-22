@@ -1,39 +1,34 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CasesExplorer from "../../components/CasesExplorer.svelte";
-import { loadAllPortfolios } from "../../content/portfolios/_portfolios";
+import { getCollection } from "astro:content";
 
-// 1. Загружаем все кейсы
-const caseImports = await Astro.glob("../../content/cases/*.md");
-const allCases = Object.values(caseImports).map((importCase) => {
-    const { url, tech, title, descr, cover } = importCase.frontmatter;
-    return {
-        metadata: {
-            url,
-            tech,
-            title,
-            descr,
-            cover,
-        },
-    };
-});
-
-// 2. Загружаем все портфолио для получения списка ролей
-const allPortfoliosRaw = loadAllPortfolios();
-const allPortfolios = allPortfoliosRaw.map(({ url, jobtitle, cases }) => ({
-    url,
-    jobtitle,
-    cases,
+// все кейсы
+const allCaseEntries = await getCollection("cases");
+const allCases = allCaseEntries.map((entry) => ({
+    metadata: {
+        url: entry.slug, // Используем slug как уникальный идентификатор
+        tech: entry.data.tech,
+        title: entry.data.title,
+        descr: entry.data.descr,
+        cover: entry.data.cover,
+    },
 }));
 
-// 3. Собираем все уникальные теги из всех кейсов
-const allTags = [
-    ...new Set(allCases.flatMap((c) => c.metadata.tech || [])),
-].sort();
+// все портфолио для получения списка ролей
+const allPortfolioEntries = await getCollection("portfolios");
+const portfoliosForFilter = allPortfolioEntries.map((entry) => ({
+    url: entry.data.url,
+    jobtitle: entry.data.jobtitle,
+    cases: entry.data.cases,
+}));
 
-// 4. Формируем данные для фильтров
+// сборка списка уникальных тегов из всех кейсов
+const allTags = [...new Set(allCases.flatMap((c) => c.metadata.tech))].sort();
+
+// данные для фильтров
 const filtersData = {
-    roles: allPortfolios.map((p) => ({ id: p.url, name: p.jobtitle })),
+    roles: portfoliosForFilter.map((p) => ({ id: p.url, name: p.jobtitle })),
     tags: allTags,
 };
 ---
@@ -42,12 +37,31 @@ const filtersData = {
     title="Все кейсы"
     description="Обзор всех выполненных проектов с возможностью фильтрации и поиска."
 >
-    <main class="page-container">
+    <div class="cases-all container">
+        <div class="cases-all__header">
+            <h1>Кейсы</h1>
+            <p>От идеи до реализации: посмотрите, как создавались проекты.</p>
+        </div>
         <CasesExplorer
             client:load
             {allCases}
             {filtersData}
-            allPortfolios={allPortfolios}
+            allPortfolios={portfoliosForFilter}
         />
-    </main>
+    </div>
 </Layout>
+
+<style lang="scss">
+    @use "../../styles/h1-title" as *;
+
+    .cases-all {
+        display: flex;
+        flex-direction: column;
+
+        &__header {
+            padding: 2em 0;
+            text-align: center;
+            @include title-h1;
+        }
+    }
+</style>

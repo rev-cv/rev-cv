@@ -1,0 +1,27 @@
+@mixin title-h1 {
+    h1 {
+        font-size: clamp(2em, 5vw, 3.5em);
+        font-weight: 700;
+        color: var(--color-basic-white);
+        margin: 0;
+
+        background: var(--gradient-title);
+        background-size: 400% 100%;
+
+        color: transparent;
+
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        animation: gradient-shift 10s ease infinite alternate;
+    }
+
+    p {
+        font-size: clamp(0.6em, 2vw, 0.8em);
+        font-weight: 300;
+        color: var(--color-basic-white-80);
+        margin: 0.5em auto 0;
+        max-width: 600px;
+        font-style: italic;
+    }
+}

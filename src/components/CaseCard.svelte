@@ -43,10 +43,18 @@
         }
     }
 
+    let isClosing = $state(false);
+
     onMount(() => {
         const handlePopState = () => {
             if (!window.location.pathname.includes("/cases/")) {
-                isModalOpen = false;
+                // Запускаем закрытие, но не размонтируем сразу
+                isClosing = true;
+                // Даем время на анимацию
+                setTimeout(() => {
+                    isModalOpen = false;
+                    isClosing = false;
+                }, 350);
             }
         };
         window.addEventListener("popstate", handlePopState);
@@ -112,6 +120,7 @@
         {metadata}
         {content}
         rect={isModalOpen}
+        bind:isClosing
         unmounte={() => {
             isModalOpen = false;
         }}
@@ -134,11 +143,11 @@
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
 
-        transition: scale 300ms ease-in-out;
+        // transition: box-shadow 300ms ease-in-out;
 
-        &:hover {
-            scale: 1.01;
-        }
+        // &:hover {
+        //     box-shadow: 0 0 20px -5px var(--color-azure);
+        // }
 
         &__title {
             position: absolute;

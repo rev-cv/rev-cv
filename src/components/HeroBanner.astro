@@ -1,12 +1,12 @@
 ---
-import { loadAllPortfolios } from "../content/portfolios/_portfolios";
+import { getCollection } from "astro:content";
 import SVGMail from "../assets/email.svg";
 import SVGGitHub from "../assets/github.svg";
 import SVGTelegram from "../assets/telegram.svg";
 import contacts from "../content/contacts.json";
 
 const { resume } = Astro.props;
-const portfolios = loadAllPortfolios();
+const portfolios = await getCollection("portfolios");
 ---
 
 <div class="hero-banner">
@@ -23,12 +23,12 @@ const portfolios = loadAllPortfolios();
             <div>
                 <div>
                     {
-                        portfolios.map((portfolio) =>
-                            portfolio.jobtitle === resume.jobtitle ? null : (
+                        portfolios.map((entry) =>
+                            entry.data.jobtitle === resume.jobtitle ? null : (
                                 <a
-                                    href={`${import.meta.env.BASE_URL}${portfolio.url}`}
+                                    href={`${import.meta.env.BASE_URL}${entry.data.url}`}
                                 >
-                                    {portfolio.jobtitle}
+                                    {entry.data.jobtitle}
                                 </a>
                             )
                         )

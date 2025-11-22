@@ -1,6 +1,5 @@
 ---
 import Case from "../components/CaseCard.svelte";
-import type { TypeProjectCase } from "../types/TypeCase";
 const { cases } = Astro.props;
 const isSingleRow = cases.length <= 2; // Если кейсов 2 или меньше, будет один ряд
 const numRows = isSingleRow ? 1 : 2;
@@ -12,12 +11,9 @@ const caseColumns = Math.ceil(cases.length / numRows);
     <div class="portfolio-cases__slider-wrapper">
         <div class:list={["carusel", { "single-row": isSingleRow }]}>
             {
-                cases.map((c: TypeProjectCase) => (
-                    <Case
-                        client:only
-                        metadata={c.metadata}
-                        content={c.htmlContent}
-                    />
+                //@ts-ignore
+                cases.map((c) => (
+                    <Case client:only metadata={c.data} content={c.htmlContent} />
                 ))
             }
         </div>

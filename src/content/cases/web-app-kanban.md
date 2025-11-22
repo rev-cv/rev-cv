@@ -5,7 +5,7 @@ url: "web-app-kanban"
 tech:
     - "JS"
 cover: "pic/kaban-board.webp"
-media:
+media: []
 code_url: "https://github.com/rev-cv/test-slmax"
 demo_url: "https://cffdc524.test-canban.pages.dev/"
 macket_url: ""

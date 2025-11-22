@@ -12,6 +12,7 @@
     --color-black-60: rgba(17, 17, 17, 0.6);
 
     --color-bg: #0a0a0a;
+    --color-bg-30: rgba(10, 10, 10, 0.3);
 
     --color-button-hover-bg: rgba(255, 255, 255, 0.05);
 
@@ -34,4 +35,13 @@
     --color-beige: #e9ded4;
     --color-linear: linear-gradient(to right, #e8dcd1 0%, #ffffff 100%);
     --color-brown: #845731;
+
+    --gradient-title: linear-gradient(
+        90deg,
+        var(--color-basic-white),
+        var(--color-azure),
+        var(--color-basic-white),
+        var(--color-azure),
+        var(--color-basic-white)
+    );
 }

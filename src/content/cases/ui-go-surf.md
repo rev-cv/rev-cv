@@ -7,7 +7,7 @@ tech:
     - "JS"
     - "SCSS"
 cover: "vid/ui-surf.mp4"
-media:
+media: []
 code_url: "https://github.com/rev-cv/test-west"
 demo_url: "https://rev-cv.github.io/test-west/"
 macket_url: "https://www.figma.com/design/Dh3oxsX5naFOuXj2f7a6gy"

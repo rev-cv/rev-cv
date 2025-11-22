@@ -1,5 +1,4 @@
 @mixin message-shared($padding_in_item, $border_radius) {
-    overflow-y: auto;
     padding-right: $padding_in_item;
     display: flex;
     flex-direction: column;

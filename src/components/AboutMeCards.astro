@@ -1,5 +1,8 @@
 ---
-import type { AboutMe } from "../types/TypePortfolio";
+import type { CollectionEntry } from "astro:content";
+type AboutMeCard = NonNullable<
+    CollectionEntry<"portfolios">["data"]["aboutme"]
+>[number];
 const { cards } = Astro.props;
 
 import SVGCrossBrowser from "../assets/aboutme/cross-browser.svg";
@@ -74,7 +77,7 @@ const svgs = {
 <div class="about-me">
     <div class="container">
         {
-            cards.map((card: AboutMe) => {
+            cards.map((card: AboutMeCard) => {
                 // @ts-ignore
                 const Icon = svgs[card.id] ? svgs[card.id] : SVGCrossBrowser;
                 return (

@@ -1,19 +1,31 @@
 ---
-import type { MySkills } from "../types/TypeSkills";
+import type { CollectionEntry } from "astro:content";
 import ProgressLevel from "./ProgressLevel.astro";
+
+type PortfolioData = CollectionEntry<"portfolios">["data"];
+type SkillItem = NonNullable<PortfolioData["skills"]>[number];
+type ToolItem = NonNullable<PortfolioData["tools"]>[number];
+type QualityItem = NonNullable<PortfolioData["quality"]>[number];
+type GenericItem = SkillItem | ToolItem | QualityItem;
+
 const { items, title, isSkills = false } = Astro.props;
-const s_items = items.sort((a: MySkills, b: MySkills) => b.level - a.level);
+const s_items = items.sort(
+    (a: GenericItem, b: GenericItem) =>
+        ("level" in b ? b.level : 0) - ("level" in a ? a.level : 0)
+);
 ---
 
 <div class={`my-item container${isSkills ? " skills" : " tools"}`}>
     <h2 class="my-item__card-head">{title}</h2>
     {
-        s_items.map((item: MySkills) => {
+        s_items.map((item: GenericItem) => {
             return (
                 <div class="my-item__card">
                     <div class="my-item__card-title">{item.name}</div>
                     <div class="my-item__card-descr">{item.description}</div>
-                    {isSkills && <ProgressLevel level={item.level} />}
+                    {isSkills && "level" in item && (
+                        <ProgressLevel level={item.level} />
+                    )}
                 </div>
             );
         })

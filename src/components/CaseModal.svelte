@@ -7,7 +7,13 @@
     import SVGFigma from "../assets/SVGFigma.svelte";
     import SVGClose from "../assets/SVGClose.svelte";
 
-    let { metadata, content, unmounte, rect } = $props();
+    let {
+        metadata,
+        content,
+        unmounte,
+        rect,
+        isClosing = $bindable(false),
+    } = $props();
 
     let modalElement;
 
@@ -38,6 +44,58 @@
         return media;
     });
 
+    /* 
+    ════════════════════════════════════════════════════════════════════════════════
+    ПРОЦЕСС ОТКРЫТИЯ МОДАЛЬНОГО ОКНА:
+    ════════════════════════════════════════════════════════════════════════════════
+    
+    1. Пользователь кликает на кнопку .case-item (onclick={() => {...}))
+    2. Сохраняем координаты карточки: isModalOpen = cardNode.getBoundingClientRect()
+    3. Svelte рендерит <CaseModal> т.к. isModalOpen теперь truthy
+    4. В CaseModal запускается $effect():
+       - Меняет URL через history.pushState()
+       - Запускает setTimeout на 10ms для запуска анимации
+       - isModalView = true → применяется класс .render
+       - updateStyleForScreenSize() изменяет style с initialStyle на центрированные координаты
+    5. CSS transition плавно анимирует модалку от позиции карточки к центру экрана
+    
+    ════════════════════════════════════════════════════════════════════════════════
+    ПРОЦЕСС ЗАКРЫТИЯ МОДАЛЬНОГО ОКНА:
+    ════════════════════════════════════════════════════════════════════════════════
+    
+    ВАРИАНТ А: Пользователь кликает на curtain/кнопку закрытия/нажимает Escape
+    ────────────────────────────────────────────────────────────────────────────────
+    1. Вызывается closeModal(false) в CaseModal
+    2. isModalView = false → убирается класс .render
+    3. style = initialStyle → модалка возвращается к координатам карточки
+    4. CSS transition анимирует возврат модалки (300ms)
+    5. setTimeout на 350ms дожидается завершения анимации
+    6. history.back() возвращает URL назад
+    7. Срабатывает handlePopState в родителе (Case.svelte)
+    8. isClosing = true передается в CaseModal
+    9. Еще один setTimeout на 350ms
+    10. isModalOpen = false → Svelte размонтирует <CaseModal>
+    
+    ВАРИАНТ Б: Пользователь нажимает кнопку "Назад" в браузере
+    ────────────────────────────────────────────────────────────────────────────────
+    1. history.back() меняет URL
+    2. Срабатывает handlePopState в родителе (Case.svelte)
+    3. Проверка: если URL больше не содержит "/cases/"
+    4. isClosing = true передается в CaseModal через bind:isClosing
+    5. В CaseModal срабатывает $effect() на изменение isClosing
+    6. isModalView = false, style = initialStyle → запуск анимации закрытия
+    7. CSS transition анимирует возврат (300ms)
+    8. setTimeout на 350ms в родителе дожидается анимации
+    9. isModalOpen = false → Svelte размонтирует <CaseModal>
+    
+    ════════════════════════════════════════════════════════════════════════════════
+    КРИТИЧЕСКИ ВАЖНО:
+    - Родитель НЕ размонтирует модалку сразу, а ждет 350ms для завершения анимации
+    - isClosing используется как флаг для синхронизации между родителем и модалкой
+    - Анимация всегда отрабатывает ДО размонтирования компонента
+    ════════════════════════════════════════════════════════════════════════════════
+    */
+
     function updateStyleForScreenSize() {
         const rectMobile = `
             --transform: translate(calc(50vw - 50%), calc(50vh - 50%)); 
@@ -56,34 +114,61 @@
         }
     }
 
+    /* 
+    ════════════════════════════════════════════════════════════════════════════════
+    ИНИЦИАЛИЗАЦИЯ МОДАЛЬНОГО ОКНА (при монтировании):
+    ═══════════════════════════════════════════════════════════════════════════════*/
     $effect(() => {
+        // 1. Меняем URL в браузере на /cases/[название-кейса]
         const newUrl = `${BASE_URL}cases/${metadata.url}`;
         history.pushState({ caseUrl: metadata.url }, "", newUrl);
 
+        // 2. Небольшая задержка для корректного запуска анимации
         setTimeout(() => {
-            isModalView = true;
-            updateStyleForScreenSize();
+            isModalView = true; // Применяет класс .render к .curtain
+            updateStyleForScreenSize(); // Устанавливает финальные координаты (центр экрана)
         }, 10);
 
+        // 3. Обработчик кнопки "Назад" в браузере
         const handlePopState = (event) => {
-            // Если мы вернулись из состояния, где был открыт кейс, закрываем модалку
+            // Если вернулись на другую страницу (не этот кейс)
             if (event.state?.caseUrl !== metadata.url) {
-                closeModal(true); // Закрываем без изменения истории
+                closeModal(true); // Закрываем с флагом isFromHistory=true
             }
         };
 
         window.addEventListener("popstate", handlePopState);
         document.addEventListener("keydown", handleKeydown);
         window.addEventListener("resize", updateStyleForScreenSize);
+
         return () => {
             window.removeEventListener("popstate", handlePopState);
             document.removeEventListener("keydown", handleKeydown);
             window.removeEventListener("resize", updateStyleForScreenSize);
         };
     });
+    /* END ИНИЦИАЛИЗАЦИЯ МОДАЛЬНОГО ОКНА */
 
+    /* 
+    ════════════════════════════════════════════════════════════════════════════════
+    ЗАКРЫТИЕ МОДАЛКИ (клик на curtain, кнопку закрытия, Escape):
+    ══════════════════════════════════════════════════════════════════════════════*/
     function closeModal(isFromHistory = false) {
-        unmounte();
+        // 1. Запускаем анимацию закрытия
+        isModalView = false; // Убирает класс .render
+        style = initialStyle; // Возвращает модалку к координатам карточки
+
+        // 2. Ждем завершения анимации (300ms transition + 50ms запас)
+        setTimeout(() => {
+            if (!isFromHistory) {
+                // Если закрытие инициировано пользователем (не через history.back)
+                history.back(); // Возвращаем URL назад
+                // Это вызовет handlePopState в родителе → isClosing=true → размонтирование
+            } else {
+                // Если пришли из history.back (обработчик handlePopState выше)
+                unmounte(); // Размонтируем компонент напрямую
+            }
+        }, 350);
     }
 
     function handleKeydown(e) {
@@ -91,12 +176,96 @@
             closeModal();
         }
     }
+    /* END ЗАКРЫТИЕ МОДАЛКИ */
 
-    function handleTransitionEnd(e) {
-        if (e.propertyName === "transform" && !isModalView) {
-            // unmounte();
+    /* 
+    ════════════════════════════════════════════════════════════════════════════════
+    РЕАКЦИЯ НА ЗАКРЫТИЕ ИЗ РОДИТЕЛЯ (через кнопку "Назад" браузера):
+    ══════════════════════════════════════════════════════════════════════════════*/
+    $effect(() => {
+        // Если родитель установил isClosing=true (через bind:isClosing)
+        if (isClosing) {
+            isModalView = false; // Убирает класс .render
+            style = initialStyle; // Возвращает к начальным координатам карточки
+            // CSS transition автоматически анимирует переход (300ms)
+            // Родитель дождется 350ms и размонтирует компонент
         }
-    }
+    });
+    /* END РЕАКЦИЯ НА ЗАКРЫТИЕ ИЗ РОДИТЕЛЯ*/
+
+    /* 
+    ════════════════════════════════════════════════════════════════════════════════
+    ПРОЦЕСС РАЗВОРАЧИВАНИЯ МЕДИА НА ВЕСЬ ЭКРАН МОДАЛКИ:
+    ════════════════════════════════════════════════════════════════════════════════
+
+    ОТКРЫТИЕ МЕДИА (клик на изображение/видео в .left-scroll):
+    ────────────────────────────────────────────────────────────────────────────────
+    1. Пользователь кликает на button с медиа → вызывается previewMedia(e, mediaUrl)
+    2. Проверка: if (window.innerWidth < 1144) return; (только на десктопе)
+    3. Получаем элементы:
+    - button = e.currentTarget (кнопка-контейнер)
+    - videoWrapper или img = animatedElement (что анимировать)
+    4. Сохраняем исходные координаты медиа:
+    - button._mediaRect = animatedElement.getBoundingClientRect()
+    - button._isVideo = true/false (тип медиа для обратной анимации)
+    5. Вычисляем позицию медиа относительно модалки (не viewport):
+    - modalRect = modalElement.getBoundingClientRect()
+    - relativeTop = mediaRect.top - modalRect.top
+    - relativeLeft = mediaRect.left - modalRect.left
+    6. Фиксируем высоту кнопки: button.style.minHeight (чтобы не схлопнулась)
+    7. Устанавливаем начальную позицию анимации:
+    - position: absolute
+    - top/left: текущие координаты относительно модалки
+    - width/height: текущие размеры медиа
+    - z-index: 103 (над всем контентом модалки)
+    - transition: all 200ms ease-in-out
+    8. Для видео: устанавливаем object-fit: contain для video внутри
+    9. Для изображений: устанавливаем object-fit: contain и border-radius: 1.4rem
+    10. void animatedElement.offsetHeight; (принудительный reflow для Firefox)
+    11. requestAnimationFrame(() => {...}) - в следующем кадре:
+        - top: 0, left: 0, width: 100%, height: 100%
+        - border-radius: 0 (для изображений)
+        - CSS transition плавно анимирует растягивание на всю модалку (200ms)
+    12. setTimeout на 400ms (ждем завершения анимации + запас):
+        - backgroundColor: var(--color-black) (черный фон)
+        - isOpenMedia = true (флаг открытого состояния)
+        - openMediaUrl = mediaUrl (для отображения контролов видео)
+
+    ЗАКРЫТИЕ МЕДИА (повторный клик на то же медиа):
+    ────────────────────────────────────────────────────────────────────────────────
+    1. Проверка: else блок в previewMedia (если isOpenMedia === true)
+    2. Получаем сохраненные данные:
+    - mediaRect = button._mediaRect (исходные координаты)
+    - isVideoElement = button._isVideo (тип медиа)
+    3. Вычисляем обратную позицию относительно модалки:
+    - modalRect = modalElement.getBoundingClientRect() (могла измениться)
+    - relativeTop = mediaRect.top - modalRect.top
+    - relativeLeft = mediaRect.left - modalRect.left
+    4. Устанавливаем анимацию сжатия:
+    - transition: all 200ms ease-in-out
+    - border-radius: 1.4rem (для изображений)
+    - top/left: возврат к исходным координатам
+    - width/height: возврат к исходным размерам
+    - backgroundColor: "" (убираем черный фон)
+    5. setTimeout на 200ms (ждем завершения анимации):
+    - animatedElement.style.cssText = "" (сброс всех inline стилей)
+    - video.style.objectFit = "" (для видео)
+    - button.style.minHeight = "" (убираем фиксированную высоту)
+    - isOpenMedia = false (сброс флага)
+    - openMediaUrl = null (скрываем контролы видео)
+
+    ОСОБЕННОСТИ:
+    ────────────────────────────────────────────────────────────────────────────────
+    - Координаты вычисляются ОТНОСИТЕЛЬНО модалки, а не viewport
+    (т.к. модалка может быть прокручена)
+    - Для видео анимируется .video-wrapper, для изображений - сам img
+    - button._mediaRect и button._isVideo хранят данные для обратной анимации
+    - close-overlay появляется только когда openMediaUrl === media
+    (overlay позволяет закрыть видео кликом, оставив контролы доступными)
+    - На мобильных (< 1144px) функция сразу выходит через return
+
+    ════════════════════════════════════════════════════════════════════════════════
+    */
 
     function previewMedia(e, mediaUrl) {
         if (window.innerWidth < 1144) return;
@@ -226,7 +395,6 @@
         id="modal-case"
         {style}
         bind:this={modalElement}
-        ontransitionend={handleTransitionEnd}
         onclick={(e) => e.stopPropagation()}
         onkeydown={(e) => e.stopPropagation()}
         role="dialog"
@@ -328,7 +496,6 @@
             </div>
             <div class="title">{metadata.title}</div>
             <div class="descr">{metadata.descr}</div>
-
             <div class="content">{@html content}</div>
 
             <div class="case-nav">
@@ -480,6 +647,7 @@
 
             .right-scroll {
                 @include md.message-shared($padding_in_item, $border_radius);
+                overflow-y: auto;
             }
         }
 

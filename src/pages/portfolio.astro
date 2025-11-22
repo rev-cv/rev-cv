@@ -1,53 +1,37 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Contacts from "../components/Contacts.astro";
-import { loadAllPortfolios } from "../content/portfolios/_portfolios";
-const portfolios = loadAllPortfolios().sort((a, b) => {
-    return b.cases.length - a.cases.length;
+import { getCollection } from "astro:content";
+const portfolios = (await getCollection("portfolios")).sort((a, b) => {
+    return b.data.cases.length - a.data.cases.length;
 });
 ---
 
 <Layout title={`Мои портфолио`} description={""} cover={""} keywords={[]}>
     <div class="portfolio-all container">
-        <p>
-            Мне всегда было интересно, как устроены вещи — будь то интерфейс,
-            система, команда или целый продукт. Это любопытство и стремление
-            разбираться в сути сделали меня специалистом с многопрофильным
-            опытом. Мои портфолио отражают разные направления работы, но все они
-            связаны общей идеей — видеть проект целиком и понимать, как
-            отдельные элементы взаимодействуют между собой.
-        </p>
-
-        <p>
-            Такой подход — не про разрозненные навыки, а про способность
-            соединять точки. На стыке ролей рождаются сильные решения, где
-            дизайн не спорит с разработкой, а стратегия поддерживает реализацию.
-        </p>
-
-        <p>
-            Работая на пересечении дисциплин, я стремлюсь видеть не только
-            задачу, но и контекст, в котором она живёт. Многопрофильность для
-            меня — не компромисс, а осознанная стратегия. Она помогает быстро
-            адаптироваться, находить решения, которые не лежат на поверхности, и
-            обеспечивать целостность проекта от идеи до внедрения.
-        </p>
+        <div class="portfolio-all__header">
+            <h1>Портфолио</h1>
+            <p>Разные роли, один подход — создавать полезные продукты.</p>
+        </div>
 
         <div class="portfolio-all__list">
             {
-                portfolios.map((p) => (
+                portfolios.map((entry) => (
                     <div class="portfolio-all__card">
                         <a
                             class="link"
-                            href={`${import.meta.env.BASE_URL}${p.url}`}
+                            href={`${import.meta.env.BASE_URL}${entry.data.url}`}
                         />
 
-                        <div class="title">{p.jobtitle}</div>
-                        <div class="descr">{p.description}</div>
-                        <div class="count-cases">{p.cases.length} кейсов</div>
+                        <div class="title">{entry.data.jobtitle}</div>
+                        <div class="descr">{entry.data.description}</div>
+                        <div class="count-cases">
+                            {entry.data.cases.length} кейсов
+                        </div>
                         <picture>
                             <img
-                                src={`${import.meta.env.BASE_URL}${p.cover}`}
-                                alt={p.jobtitle}
+                                src={`${import.meta.env.BASE_URL}${entry.data.cover}`}
+                                alt={entry.data.jobtitle}
                             />
                         </picture>
                     </div>
@@ -66,6 +50,7 @@ const portfolios = loadAllPortfolios().sort((a, b) => {
 <style lang="scss">
     $border_radius: 2rem;
     $padding_in_item: 0.6rem;
+    @use "../styles/h1-title" as *;
 
     .portfolio-all {
         display: flex;
@@ -87,11 +72,17 @@ const portfolios = loadAllPortfolios().sort((a, b) => {
             }
         }
 
+        &__header {
+            padding: 2em 0;
+            text-align: center;
+            @include title-h1;
+        }
+
         &__list {
             padding: 2em 0;
             display: flex;
             flex-direction: column;
-            gap: 1em;
+            gap: 1rem;
         }
 
         &__card {
@@ -109,7 +100,7 @@ const portfolios = loadAllPortfolios().sort((a, b) => {
             padding: $padding_in_item 1.6em $padding_in_item $padding_in_item;
             overflow: hidden;
             z-index: 0;
-            transition: scale 300ms ease-in-out;
+            transition: box-shadow 300ms ease-in-out;
             font-size: 1em;
 
             @media (max-width: 1100px) {
@@ -139,7 +130,7 @@ const portfolios = loadAllPortfolios().sort((a, b) => {
             }
 
             &:hover {
-                scale: 1.005;
+                box-shadow: 0 0 25px -5px var(--color-basic-white);
             }
 
             .link {

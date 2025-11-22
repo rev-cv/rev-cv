@@ -1,140 +1,144 @@
 ---
 import SVGFeather from "../assets/feather.svg";
+import SVGMLogo from "../assets/logo.svg";
 const base = import.meta.env.BASE_URL;
 ---
+
+<style is:global>
+    html {
+        scrollbar-gutter: stable;
+    }
+</style>
 
 <header>
     <div>
         <menu class="container">
+            <!-- <a href={`${base}portfolio`}><SVGFeather /></a> -->
+            <div class="logo">
+                <SVGMLogo />
+            </div>
             <div class="navigator">
-                <a href={`${base}about-me`}>Обо мне</a>
+                <!-- <a href={`${base}about-me`}>Обо мне</a> -->
                 <a href={`${base}portfolio`}>Портфолио</a>
                 <a href={`${base}cases`}>Кейсы</a>
-                <a href={`${base}skills`}>Навыки</a>
-                <a href={`${base}contacts`}>Контакты</a>
+                <!-- <a href={`${base}skills`}>Навыки</a> -->
+                <!-- <a href={`${base}contacts`}>Контакты</a> -->
             </div>
-            <a href={base}><SVGFeather /></a>
         </menu>
     </div>
 </header>
 
 <style lang="scss">
-    @media (min-width: 701px) {
-        header {
-            height: 6em;
-            z-index: 100;
+    header {
+        height: 6em;
+        z-index: 100;
 
-            > div {
-                padding: 0.8em;
-                position: fixed;
+        @media (max-width: 700px) {
+            height: 4em;
+        }
+
+        .logo {
+            height: 40px;
+            aspect-ratio: 1;
+
+            svg {
                 width: 100%;
-            }
-
-            menu {
-                background-color: transparent;
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                padding: 0.8em;
-                border-radius: 2em;
-                border: 1px solid transparent;
-                transition:
-                    background-color 300ms ease-in-out,
-                    max-width 300ms ease-in-out,
-                    backdrop-filter 300ms ease-in-out;
-
-                &.scrolled {
-                    max-width: 1000px;
-                    background-color: rgba(17, 17, 17, 0.6);
-                    backdrop-filter: blur(6px);
-                }
-
-                button,
-                a {
-                    color: var(--color-basic-white-80);
-                    text-decoration: none;
-                    padding: 0.5em 0.8em;
-                    font-size: 0.8em;
-                    border-radius: calc(2em - 16px);
-                    position: relative;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: color 300ms ease-in-out;
-
-                    &::before {
-                        content: "";
-                        position: absolute;
-                        inset: 0;
-                        background-color: transparent;
-                        transition: background-color 300ms ease-in-out;
-                    }
-
-                    &:hover::before {
-                        background-color: var(--color-button-hover-bg);
-                    }
-
-                    &:hover {
-                        color: var(--color-basic-white);
-                    }
-
-                    svg {
-                        width: 1.3em;
-                        height: 1.3em;
-                    }
-                }
-
-                > a {
-                    display: flex;
-                    align-items: center;
-                    gap: 0.5em;
-
-                    svg {
-                        width: 1.5em;
-                        height: 1.5em;
-                    }
-                }
-            }
-
-            .navigator {
-                display: flex;
-                gap: 0.3em;
+                height: 100%;
+                object-fit: contain;
             }
         }
-    }
-</style>
 
-<style lang="scss">
-    @media (max-width: 700px) {
-        header {
-            height: 6em;
-            z-index: 100;
+        > div {
+            padding: 0.8em;
+            position: fixed;
+            width: 100%;
 
-            > div {
-                position: fixed;
-                width: 100%;
+            @media (max-width: 700px) {
+                padding: 0;
+            }
+        }
+
+        menu {
+            background-color: transparent;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8em;
+            border-radius: 2em;
+            border: 1px solid transparent;
+            transition:
+                background-color 300ms ease-in-out,
+                max-width 300ms ease-in-out,
+                backdrop-filter 300ms ease-in-out;
+
+            @media (max-width: 700px) {
+                border-radius: 0;
             }
 
-            .navigator {
-                display: none;
+            &.scrolled {
+                max-width: 1000px;
+                background-color: rgba(17, 17, 17, 0.6);
+                backdrop-filter: blur(6px);
+                background-image:
+                    linear-gradient(var(--color-bg-30) 1px, transparent 1px),
+                    linear-gradient(
+                        to right,
+                        var(--color-bg-30) 1px,
+                        transparent 1px
+                    );
+                background-size: 5px 5px;
             }
 
-            .container {
-                display: flex;
-                justify-content: flex-end;
-                padding: 0.8em;
-                border-radius: 6px;
-            }
-
-            .container > a {
+            button,
+            a {
                 color: var(--color-basic-white-80);
                 text-decoration: none;
-                padding: 10px;
+                padding: 0.5em 1.2em;
+                font-size: 0.8em;
+                border-radius: calc(2em - 16px);
+                position: relative;
+                overflow: hidden;
+                cursor: pointer;
+                transition: color 300ms ease-in-out;
+                font-weight: 800;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-color: transparent;
+                    transition: background-color 300ms ease-in-out;
+                }
+
+                &:hover::before {
+                    background-color: var(--color-button-hover-bg);
+                }
+
+                &:hover {
+                    color: var(--color-basic-white);
+                }
 
                 svg {
                     width: 1.3em;
                     height: 1.3em;
                 }
             }
+
+            > a {
+                display: flex;
+                align-items: center;
+                gap: 0.5em;
+
+                svg {
+                    width: 1.5em;
+                    height: 1.5em;
+                }
+            }
+        }
+
+        .navigator {
+            display: flex;
+            gap: 0.3em;
         }
     }
 </style>

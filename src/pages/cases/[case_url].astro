@@ -1,12 +1,13 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
+import CasePage from "../../components/CasePage.astro";
 
+// интерфейс для props
 interface Props {
     caseItem: CollectionEntry<"cases">;
 }
 
-// Генерация статических путей
 export async function getStaticPaths() {
     const cases = await getCollection("cases");
 
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
     }));
 }
 
-const { caseItem } = Astro.props as Props;
+const { caseItem } = Astro.props;
 const { Content } = await caseItem.render();
 ---
 
@@ -24,20 +25,13 @@ const { Content } = await caseItem.render();
     title={caseItem.data.title}
     description={caseItem.data.descr}
     cover={caseItem.data.cover}
-    keywords={caseItem.data.tech}
+    keywords={[
+        "портфолио",
+        "кейс",
+        "разработка",
+        "проект",
+        ...caseItem.data.tech,
+    ]}
 >
-    <div class="case-page container">
-        <Content />
-    </div>
+    <CasePage caseItem={caseItem} Content={Content} />
 </Layout>
-
-<style lang="scss">
-    @use "../../styles/md-text" as md;
-
-    $border_radius: 2rem;
-    $padding_in_item: 0.6rem;
-
-    .case-page {
-        @include md.message-shared($padding_in_item, $border_radius);
-    }
-</style>

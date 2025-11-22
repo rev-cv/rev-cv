@@ -5,14 +5,7 @@
     font-weight: 700;
     gap: 0.5em;
 
-    background: linear-gradient(
-        90deg,
-        var(--color-basic-white),
-        var(--color-azure),
-        var(--color-basic-white),
-        var(--color-azure),
-        var(--color-basic-white)
-    );
+    background: var(--gradient-title);
     background-size: 400% 100%;
 
     color: transparent;

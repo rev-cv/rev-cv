@@ -1,5 +1,5 @@
 ---
-import { loadAllPortfolios } from "../content/portfolios/_portfolios";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import HeroBanner from "../components/HeroBanner.astro";
 import AboutMe from "../components/AboutMeCards.astro";
@@ -8,48 +8,45 @@ import SkillsAndTools from "../components/SkillsAndTools.astro";
 import Education from "../components/Education.astro";
 import Roadmap from "../components/Roadmap.astro";
 import Contacts from "../components/Contacts.astro";
-import type { TypePortfoliosGlob, PortfolioItem } from "../types/TypePortfolio";
 
 // ↓ статические пути для всех доступных резюме
 export async function getStaticPaths() {
-    const allPortfolios = loadAllPortfolios();
-    return allPortfolios.map((portfolio) => ({
-        params: { resume: portfolio.url },
+    const allPortfolioEntries = await getCollection("portfolios");
+    return allPortfolioEntries.map((entry) => ({
+        params: { resume: entry.data.url },
     }));
 }
 
 // ↓ получить текущий slug из URL и по нему найти нужное портфолио
-const allPortfolios = loadAllPortfolios();
+const allPortfolioEntries = await getCollection("portfolios");
 const { resume: resumeSlug } = Astro.params;
-const currentResume = allPortfolios.find(
-    (portfolio) => portfolio.url === resumeSlug
+const currentPortfolioEntry = allPortfolioEntries.find(
+    (entry) => entry.data.url === resumeSlug
 );
 
 // если портфолио не найдено → 404
-if (!currentResume) {
+if (!currentPortfolioEntry) {
     return Astro.redirect("/404");
 }
 
-// ↓ остальные портфолио для навигации
-const otherPortfolios = allPortfolios.filter(
-    (portfolio) => portfolio.url !== resumeSlug
-);
+const currentResume = currentPortfolioEntry.data;
 
 const caseImports = await Astro.glob("../content/cases/*.md");
-const allCases = await Promise.all(
-    Object.values(caseImports).map(async (importCase) => ({
-        metadata: importCase.frontmatter,
-        htmlContent: await importCase.compiledContent(),
-    }))
-);
 
-const cases = allCases
-    .filter((c) => currentResume.cases.includes(c.metadata.url))
-    .sort((a, b) => {
-        const aIndex = currentResume.cases.indexOf(a.metadata.url);
-        const bIndex = currentResume.cases.indexOf(b.metadata.url);
-        return aIndex - bIndex;
-    });
+const cases = (
+    await Promise.all(
+        caseImports
+            .filter((c) => currentResume.cases.includes(c.frontmatter.url))
+            .map(async (c) => ({
+                data: c.frontmatter,
+                htmlContent: await c.compiledContent(),
+            }))
+    )
+).sort((a, b) => {
+    const aIndex = currentResume.cases.indexOf(a.data.url);
+    const bIndex = currentResume.cases.indexOf(b.data.url);
+    return aIndex - bIndex;
+});
 ---
 
 <Layout
