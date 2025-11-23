@@ -10,12 +10,41 @@ const portfolios = await getCollection("portfolios");
 ---
 
 <div class="hero-banner">
-    <picture class="hero-banner__bg">
-        <img
+    <div class="hero-banner__bg">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            opacity="0.4"
+        >
+            <defs>
+                <filter id="blur">
+                    <feTurbulence
+                        type="fractalNoise"
+                        baseFrequency="0.01 0.04"
+                        numOctaves="2"
+                        seed="0"
+                        result="turbulence"></feTurbulence>
+                    <feDisplacementMap
+                        in="SourceGraphic"
+                        in2="turbulence"
+                        scale="200"></feDisplacementMap>
+                    <feGaussianBlur stdDeviation="150"></feGaussianBlur>
+                </filter>
+            </defs>
+            <circle
+                cx="20%"
+                cy="30%"
+                r="800"
+                fill="var(--color-azure)"
+                filter="url(#blur)"></circle>
+        </svg>
+        <!-- <img
             src={`${import.meta.env.BASE_URL}hero-banner-bg.webp`}
             alt="textured background"
-        />
-    </picture>
+        /> -->
+    </div>
+
     <div class="hero-banner__content container">
         <div class="hero-banner__my-name">Revin Roman</div>
         <div class="hero-banner__my-job">
@@ -101,19 +130,14 @@ const portfolios = await getCollection("portfolios");
             font-size: 1em;
         }
 
-        &__bg {
+        &__bg,
+        &__bg svg {
             position: absolute;
-
             inset: 0;
-            background-position: center;
-            background-color: var(--color-black);
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                opacity: 0.3;
-            }
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
         }
 
         &__content {
@@ -351,34 +375,6 @@ const portfolios = await getCollection("portfolios");
                     }
                 }
             }
-        }
-
-        &::after {
-            content: "";
-            pointer-events: none;
-            position: absolute;
-            inset: 0;
-            background-color: var(--color-azure);
-            border-radius: 50%;
-            width: 30em;
-            height: 30em;
-            filter: blur(500px);
-            z-index: 1;
-        }
-
-        &::before {
-            content: "";
-            pointer-events: none;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            background-color: rgb(0, 0, 0);
-            // opacity: 0.3;
-            border-radius: 50%;
-            width: 30em;
-            height: 30em;
-            filter: blur(500px);
-            z-index: 2;
         }
     }
 
